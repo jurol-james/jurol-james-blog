@@ -1,0 +1,138 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { productionPosts, readingTime, tagSlug } from '../../lib/posts';
+export async function getStaticPaths() {
+  return productionPosts(await getCollection('posts')).map((post) => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}
+const { post } = Astro.props;
+const posts = productionPosts(await getCollection('posts'));
+const index = posts.findIndex((item) => item.id === post.id);
+const previous = posts[index + 1];
+const next = posts[index - 1];
+const { Content, headings } = await render(post);
+const person = {
+  '@type': 'Person',
+  name: 'Jurol James Cabaluna',
+  url: 'https://jurolc.com',
+  sameAs: [
+    'https://github.com/jurol-james',
+    'https://www.linkedin.com/in/jurol/',
+  ],
+};
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: post.data.title,
+  description: post.data.description,
+  datePublished: post.data.publishedAt.toISOString(),
+  ...(post.data.updatedAt
+    ? { dateModified: post.data.updatedAt.toISOString() }
+    : {}),
+  mainEntityOfPage: `https://blog.jurolc.com/posts/${post.id}`,
+  author: person,
+  publisher: person,
+  keywords: post.data.tags,
+};
+---
+
+<BaseLayout
+  title={`${post.data.title} — Engineering Notes`}
+  description={post.data.description}
+  canonical={`/posts/${post.id}/`}
+  type="article"
+  jsonLd={jsonLd}
+>
+  <article class="post-page">
+    <a class="back-link" href="/posts/">← All articles</a>
+    <header class="post-header">
+      {
+        post.data.series && (
+          <p class="eyebrow">
+            {post.data.series}
+            {post.data.seriesOrder ? ` · Part ${post.data.seriesOrder}` : ''}
+          </p>
+        )
+      }
+      <h1>{post.data.title}</h1><p class="post-deck">{post.data.description}</p>
+      <div class="article-meta">
+        <span>By <a href="/about/">Jurol James Cabaluna</a></span><time
+          datetime={post.data.publishedAt.toISOString()}
+          >{
+            post.data.publishedAt.toLocaleDateString('en', {
+              dateStyle: 'long',
+              timeZone: 'UTC',
+            })
+          }</time
+        >
+        {
+          post.data.updatedAt && (
+            <span>
+              Updated{' '}
+              <time datetime={post.data.updatedAt.toISOString()}>
+                {post.data.updatedAt.toLocaleDateString('en', {
+                  dateStyle: 'medium',
+                  timeZone: 'UTC',
+                })}
+              </time>
+            </span>
+          )
+        }
+        <span>{readingTime(post.body ?? '')} min read</span>
+      </div>
+      <div class="topic-list compact">
+        {
+          post.data.tags.map((tag) => (
+            <a href={`/tags/${tagSlug(tag)}/`}>{tag}</a>
+          ))
+        }
+      </div>
+    </header>
+    {
+      headings.length >= 4 && (
+        <nav class="toc" aria-label="Table of contents">
+          <>
+            <p>On this page</p>
+            <ol>
+              {headings.map((heading) => (
+                <li class={`toc-depth-${heading.depth}`}>
+                  <a href={`#${heading.slug}`}>{heading.text}</a>
+                </li>
+              ))}
+            </ol>
+          </>
+        </nav>
+      )
+    }
+    <div class="prose"><Content /></div>
+    <nav class="post-pagination" aria-label="Article navigation">
+      {
+        previous ? (
+          <a href={`/posts/${previous.id}/`}>
+            <>
+              <span>← Previous article</span>
+              <strong>{previous.data.title}</strong>
+            </>
+          </a>
+        ) : (
+          <span />
+        )
+      }
+      {
+        next ? (
+          <a class="pagination-next" href={`/posts/${next.id}/`}>
+            <>
+              <span>Next article →</span>
+              <strong>{next.data.title}</strong>
+            </>
+          </a>
+        ) : (
+          <span />
+        )
+      }
+    </nav>
+  </article>
+</BaseLayout>

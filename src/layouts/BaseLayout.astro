@@ -1,0 +1,66 @@
+---
+import Header from '../components/Header.astro';
+import '../styles/global.css';
+const {
+  title,
+  description,
+  canonical = Astro.url.pathname,
+  type = 'website',
+  jsonLd,
+} = Astro.props;
+const canonicalUrl = new URL(canonical, 'https://blog.jurolc.com').href;
+---
+
+<!doctype html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalUrl} />
+    <meta property="og:type" content={type} />
+    <meta property="og:site_name" content="Engineering Notes" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title="Engineering Notes"
+      href="/rss.xml"
+    />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    {
+      jsonLd && (
+        <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+      )
+    }
+    <script src="../scripts/theme.ts"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <div class="site-shell">
+      <Header />
+      <main id="main"><slot /></main>
+      <footer class="site-footer">
+        <p>
+          Written by <a href="/about/">Jurol James Cabaluna</a>, Senior Software
+          Engineer.
+        </p>
+        <p>
+          <a href="/rss.xml">RSS</a><span aria-hidden="true"> · </span><a
+            href="https://jurolc.com">Portfolio</a
+          ><span aria-hidden="true"> · </span><a
+            href="https://github.com/jurol-james">GitHub</a
+          >
+        </p>
+      </footer>
+    </div>
+  </body>
+</html>

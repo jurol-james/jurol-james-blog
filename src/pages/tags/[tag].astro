@@ -1,0 +1,46 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { productionPosts, tagSlug } from '../../lib/posts';
+export async function getStaticPaths() {
+  const posts = productionPosts(await getCollection('posts'));
+  const tags = [...new Set(posts.flatMap((post) => post.data.tags))];
+  return tags.map((tag) => ({
+    params: { tag: tagSlug(tag) },
+    props: { tag, posts: posts.filter((post) => post.data.tags.includes(tag)) },
+  }));
+}
+const { tag, posts } = Astro.props;
+---
+
+<BaseLayout
+  title={`${tag} — Engineering Notes`}
+  description={`Articles filed under ${tag}.`}
+  canonical={`/tags/${tagSlug(tag)}/`}
+>
+  <section class="page-intro">
+    <p class="eyebrow">Topic</p><h1>{tag}</h1><p>
+      Articles exploring {tag.toLowerCase()}.
+    </p>
+  </section>
+  <div class="article-list">
+    {
+      posts.map((post) => (
+        <a class="article-row" href={`/posts/${post.id}/`}>
+          <>
+            <time datetime={post.data.publishedAt.toISOString()}>
+              {post.data.publishedAt.toLocaleDateString('en', {
+                dateStyle: 'long',
+                timeZone: 'UTC',
+              })}
+            </time>
+            <span class="row-title">{post.data.title}</span>
+            <span class="row-arrow" aria-hidden="true">
+              ↗
+            </span>
+          </>
+        </a>
+      ))
+    }
+  </div>
+</BaseLayout>

@@ -1,0 +1,47 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+const person = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: 'Jurol James Cabaluna',
+  jobTitle: 'Senior Software Engineer',
+  url: 'https://jurolc.com',
+  sameAs: [
+    'https://github.com/jurol-james',
+    'https://www.linkedin.com/in/jurol/',
+  ],
+};
+---
+
+<BaseLayout
+  title="About — Engineering Notes"
+  description="About Jurol James Cabaluna, Senior Software Engineer."
+  canonical="/about/"
+  jsonLd={person}
+>
+  <article class="about-page">
+    <p class="eyebrow">About the author</p><h1>Jurol James Cabaluna</h1><p
+      class="about-lead"
+    >
+      Senior Software Engineer with more than 10 years of experience building
+      and evolving software systems.
+    </p>
+    <p>
+      My work spans Java, Spring Boot, enterprise systems, software
+      architecture, cloud engineering, and modern web development. I care about
+      the decisions that make systems understandable, dependable, and easier to
+      change over time.
+    </p>
+    <p>
+      Outside day-to-day delivery, I’m interested in cryptography and
+      post-quantum cryptography, distributed systems, Java, software
+      architecture, and practical engineering habits. These notes are a place to
+      explain what I’m learning and share lessons from building real systems.
+    </p>
+    <h2>Elsewhere</h2><ul>
+      <li><a href="https://jurolc.com">Portfolio</a></li><li>
+        <a href="https://github.com/jurol-james">GitHub</a>
+      </li><li><a href="https://www.linkedin.com/in/jurol/">LinkedIn</a></li>
+    </ul>
+  </article>
+</BaseLayout>
