@@ -113,7 +113,6 @@ button:focus-visible {
   flex: none;
   width: 38px;
   height: 38px;
-  background: #080a10;
 }
 .brand-copy {
   display: flex;
