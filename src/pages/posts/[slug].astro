@@ -2,6 +2,7 @@
 import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { productionPosts, readingTime, tagSlug } from '../../lib/posts';
+import { numberHeadings } from '../../lib/toc';
 export async function getStaticPaths() {
   return productionPosts(await getCollection('posts')).map((post) => ({
     params: { slug: post.id },
@@ -14,6 +15,7 @@ const index = posts.findIndex((item) => item.id === post.id);
 const previous = posts[index + 1];
 const next = posts[index - 1];
 const { Content, headings } = await render(post);
+const tocHeadings = numberHeadings(headings);
 const person = {
   '@type': 'Person',
   name: 'Jurol James Cabaluna',
@@ -97,8 +99,11 @@ const jsonLd = {
           <>
             <p>On this page</p>
             <ol>
-              {headings.map((heading) => (
-                <li class={`toc-depth-${heading.depth}`}>
+              {tocHeadings.map((heading) => (
+                <li>
+                  <span class="toc-number" aria-hidden="true">
+                    {heading.number}.
+                  </span>
                   <a href={`#${heading.slug}`}>{heading.text}</a>
                 </li>
               ))}

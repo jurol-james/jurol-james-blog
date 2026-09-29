@@ -1,6 +1,7 @@
 ---
 import Header from '../components/Header.astro';
 import '../styles/global.css';
+import { themeBootstrap } from '../lib/theme-bootstrap';
 const {
   title,
   description,
@@ -41,7 +42,8 @@ const canonicalUrl = new URL(canonical, 'https://blog.jurolc.com').href;
         <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
       )
     }
-    <script src="../scripts/theme.ts"></script>
+    <script is:inline set:html={themeBootstrap} />
+    <script is:inline type="module" src="/scripts/theme.js"></script>
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>

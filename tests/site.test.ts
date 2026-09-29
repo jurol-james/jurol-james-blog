@@ -3,6 +3,138 @@ import { postUrl, productionPosts, rssItems, tagSlug } from '../src/lib/posts';
 import type { Post } from '../src/lib/posts';
 import { postSchema } from '../src/content/schema';
 import { readFile } from 'node:fs/promises';
+import { createHash } from 'node:crypto';
+import { themeBootstrap } from '../src/lib/theme-bootstrap';
+import { numberHeadings } from '../src/lib/toc';
+import {
+  nextTheme,
+  persistTheme,
+  resolveTheme,
+} from '../public/scripts/theme.js';
+
+describe('theme behavior', () => {
+  it('uses the system preference when no valid explicit preference exists', () => {
+    expect(resolveTheme(null, 'dark')).toBe('dark');
+    expect(resolveTheme('invalid', 'light')).toBe('light');
+  });
+
+  it('lets a stored preference override the system preference', () => {
+    expect(resolveTheme('light', 'dark')).toBe('light');
+    expect(resolveTheme('dark', 'light')).toBe('dark');
+  });
+
+  it('changes theme and persists the explicit selection', () => {
+    const values = new Map<string, string>();
+    const storage = {
+      setItem: (key: string, value: string) => values.set(key, value),
+    };
+    const selected = nextTheme('light');
+    persistTheme(storage, selected);
+    expect(selected).toBe('dark');
+    expect(values.get('theme')).toBe('dark');
+    expect(resolveTheme(values.get('theme') ?? null, 'light')).toBe('dark');
+    expect(nextTheme(selected)).toBe('light');
+  });
+
+  it('allows the head bootstrap under the exact CSP hash', async () => {
+    const config = JSON.parse(
+      await readFile(new URL('../vercel.json', import.meta.url), 'utf8'),
+    ) as { headers: { headers: { key: string; value: string }[] }[] };
+    const csp = config.headers[0].headers.find(
+      ({ key }) => key === 'Content-Security-Policy',
+    )?.value;
+    const hash = createHash('sha256').update(themeBootstrap).digest('base64');
+    expect(csp).toContain(`'sha256-${hash}'`);
+    expect(csp).not.toContain("'unsafe-inline'");
+    expect(csp).not.toContain('unsafe-eval');
+  });
+});
+
+describe('table of contents', () => {
+  it('numbers mixed heading levels in one sequence while retaining depth', () => {
+    const numbered = numberHeadings([
+      { depth: 2, slug: 'first', text: 'First' },
+      { depth: 3, slug: 'detail', text: 'Detail' },
+      { depth: 2, slug: 'second', text: 'Second' },
+    ]);
+    expect(numbered.map(({ number, depth }) => [number, depth])).toEqual([
+      [1, 2],
+      [2, 3],
+      [3, 2],
+    ]);
+  });
+
+  it('uses one fixed number column and keeps long link text in the title column', async () => {
+    const styles = await readFile(
+      new URL('../src/styles/global.css', import.meta.url),
+      'utf8',
+    );
+    expect(styles).toMatch(
+      /\.toc li\s*\{[^}]*grid-template-columns:\s*2\.25em minmax\(0, 1fr\)/s,
+    );
+    expect(styles).toMatch(/\.toc a\s*\{[^}]*overflow-wrap:\s*anywhere/s);
+    expect(styles).not.toContain('.toc-depth-3');
+  });
+});
+
+describe('theme color contrast', () => {
+  it('keeps text, metadata, links, focus, and code comments at WCAG AA contrast', async () => {
+    const styles = await readFile(
+      new URL('../src/styles/global.css', import.meta.url),
+      'utf8',
+    );
+    const tokensFor = (dark: boolean) => {
+      const block = styles.match(
+        dark
+          ? /:root\[data-theme='dark'\]\s*\{([^}]+)\}/
+          : /:root\s*\{([^}]+)\}/,
+      );
+      expect(block).not.toBeNull();
+      return Object.fromEntries(
+        [...(block?.[1].matchAll(/(--[\w-]+):\s*(#[\da-f]+)/gi) ?? [])].map(
+          ([, name, value]) => [name, value],
+        ),
+      ) as Record<string, string>;
+    };
+    const contrast = (foreground: string, background: string) => {
+      const luminance = (hex: string) => {
+        const [r, g, b] = hex
+          .slice(1)
+          .match(/../g)!
+          .map((channel) => parseInt(channel, 16) / 255)
+          .map((channel) =>
+            channel <= 0.04045
+              ? channel / 12.92
+              : ((channel + 0.055) / 1.055) ** 2.4,
+          );
+        return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+      };
+      const a = luminance(foreground);
+      const b = luminance(background);
+      return (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05);
+    };
+
+    for (const dark of [false, true]) {
+      const tokens = tokensFor(dark);
+      for (const token of [
+        '--color-text',
+        '--color-text-muted',
+        '--color-accent',
+        '--color-focus',
+      ]) {
+        expect(
+          contrast(tokens[token], tokens['--color-background']),
+        ).toBeGreaterThanOrEqual(4.5);
+      }
+      expect(
+        contrast(
+          tokens['--color-code-comment'],
+          tokens['--color-code-background'],
+        ),
+      ).toBeGreaterThanOrEqual(4.5);
+    }
+  });
+});
 
 const fixture = (id: string, publishedAt: string, draft = false) =>
   ({
