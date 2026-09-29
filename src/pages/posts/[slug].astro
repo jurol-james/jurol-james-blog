@@ -2,6 +2,7 @@
 import { getCollection, render } from 'astro:content';
 import { getImage, Image } from 'astro:assets';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import ArticleShare from '../../components/ArticleShare.astro';
 import { productionPosts, readingTime, tagSlug } from '../../lib/posts';
 import { numberHeadings } from '../../lib/toc';
 import { absoluteSiteUrl } from '../../lib/seo';
@@ -18,6 +19,8 @@ const previous = posts[index + 1];
 const next = posts[index - 1];
 const { Content, headings } = await render(post);
 const tocHeadings = numberHeadings(headings);
+const canonicalPath = `/posts/${post.id}/`;
+const canonicalUrl = absoluteSiteUrl(canonicalPath);
 const socialImage = post.data.coverImage
   ? await getImage({
       src: post.data.coverImage,
@@ -48,7 +51,7 @@ const jsonLd = {
   ...(post.data.updatedAt
     ? { dateModified: post.data.updatedAt.toISOString() }
     : {}),
-  mainEntityOfPage: `https://blog.jurolc.com/posts/${post.id}`,
+  mainEntityOfPage: canonicalUrl,
   author: person,
   publisher: person,
   keywords: post.data.tags,
@@ -58,7 +61,7 @@ const jsonLd = {
 <BaseLayout
   title={`${post.data.title} — Engineering Notes`}
   description={post.data.description}
-  canonical={`/posts/${post.id}/`}
+  canonical={canonicalPath}
   type="article"
   jsonLd={jsonLd}
   socialImage={socialImage && {
@@ -131,6 +134,13 @@ const jsonLd = {
           ))
         }
       </div>
+      <ArticleShare
+        canonicalUrl={canonicalUrl}
+        title={post.data.title}
+        description={post.data.description}
+        mediaUrl={socialImageUrl}
+        variant="compact"
+      />
     </header>
     {
       headings.length >= 4 && (
@@ -152,6 +162,13 @@ const jsonLd = {
       )
     }
     <div class="prose"><Content /></div>
+    <ArticleShare
+      canonicalUrl={canonicalUrl}
+      title={post.data.title}
+      description={post.data.description}
+      mediaUrl={socialImageUrl}
+      variant="full"
+    />
     <nav class="post-pagination" aria-label="Article navigation">
       {
         previous ? (

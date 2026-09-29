@@ -91,4 +91,102 @@ describe('built article image output', () => {
       'https://central.sonatype.com/artifact/io.github.jurol-james/zerp-quantum-crypto',
     );
   });
+
+  it('renders compact and full share variants with identical canonical destinations', async () => {
+    const html = await readFile(articlePath, 'utf8');
+    const toc = html.match(/<nav class="toc"[\s\S]*?<\/nav>/)?.[0];
+    const canonicalUrl =
+      'https://blog.jurolc.com/posts/post-quantum-cryptography-engineers/';
+    const sections = [
+      ...html.matchAll(
+        /<section class="article-share article-share--(compact|full)" aria-label="Share this article">([\s\S]*?)<\/section>/g,
+      ),
+    ];
+    expect(sections).toHaveLength(2);
+    const compact = sections.find(([, variant]) => variant === 'compact');
+    const full = sections.find(([, variant]) => variant === 'full');
+    expect(compact).toBeDefined();
+    expect(full).toBeDefined();
+    const compactSection = compact?.[0] ?? '';
+    const fullSection = full?.[0] ?? '';
+    expect(compactSection).toContain('class="share-compact-label">Share</p>');
+    expect(compactSection).not.toContain('<h2>Share this article</h2>');
+    expect(fullSection).toContain('<h2>Share this article</h2>');
+    expect(fullSection).toContain('LinkedIn</span>');
+    expect(compactSection).toContain('role="status" aria-live="polite"');
+    expect(fullSection).toContain('role="status" aria-live="polite"');
+    expect(html).toContain(
+      '<script type="module" src="/scripts/article-sharing.js"></script>',
+    );
+
+    const socialUrls = (section: string) => {
+      const links = [
+        ...section.matchAll(
+          /<a href="(https:\/\/www\.(?:linkedin|facebook|pinterest)\.com[^\"]+)" target="_blank" rel="noopener noreferrer" aria-label="Share on (LinkedIn|Facebook|Pinterest)"/g,
+        ),
+      ];
+      expect(links).toHaveLength(3);
+      for (const [, href, label] of links) {
+        expect(section).toContain(`aria-label="Share on ${label}"`);
+        const url = new URL(href.replaceAll('&amp;', '&'));
+        const target = url.searchParams.get('url') ?? url.searchParams.get('u');
+        expect(target).toBe(canonicalUrl);
+        expect(href).not.toMatch(/vercel\.app|localhost|utm_|fbclid=/i);
+      }
+      const pinterest = new URL(
+        links
+          .find(([, href]) => href.includes('pinterest.com'))![1]
+          .replaceAll('&amp;', '&'),
+      );
+      expect(pinterest.searchParams.get('media')).toMatch(
+        /^https:\/\/blog\.jurolc\.com\/_astro\//,
+      );
+      return links.map(([, href]) => href);
+    };
+    expect(socialUrls(compactSection)).toEqual(socialUrls(fullSection));
+
+    for (const section of [compactSection, fullSection]) {
+      expect(section.match(/data-copy-url="([^"]+)"/)?.[1]).toBe(canonicalUrl);
+      expect(section).toContain('aria-label="Copy article link"');
+      expect(section).toContain('aria-hidden="true"');
+      expect(section).not.toMatch(/\sid="/);
+    }
+    expect(html.match(/data-share-status/g)).toHaveLength(2);
+    const copyButtons = [...html.matchAll(/data-copy-url="([^"]+)"/g)].map(
+      ([, url]) => url,
+    );
+    expect(copyButtons).toEqual([canonicalUrl, canonicalUrl]);
+
+    const metadataStart = html.indexOf('class="article-meta"');
+    const topicsStart = html.indexOf('class="topic-list compact"');
+    const tocStart = html.indexOf('<nav class="toc"');
+    const bodyStart = html.indexOf('<div class="prose">');
+    expect(compact?.index).toBeGreaterThan(metadataStart);
+    expect(compact?.index).toBeGreaterThan(topicsStart);
+    expect(compact?.index).toBeLessThan(tocStart);
+    expect(full?.index).toBeGreaterThan(bodyStart);
+    expect(html.indexOf('class="post-pagination"')).toBeGreaterThan(
+      full?.index ?? 0,
+    );
+    const ids = [...html.matchAll(/\sid="([^"]+)"/g)].map(([, id]) => id);
+    expect(new Set(ids).size).toBe(ids.length);
+
+    const headingPermalinks = [
+      ...html.matchAll(
+        /<h([23]) id="([^"]+)">[\s\S]*?<a href="#([^"]+)" class="heading-permalink" aria-label="Link to section: ([^"]+)"/g,
+      ),
+    ];
+    expect(headingPermalinks.some(([, level]) => level === '2')).toBe(true);
+    expect(headingPermalinks.some(([, level]) => level === '3')).toBe(true);
+    for (const [, , id, hrefId] of headingPermalinks) {
+      expect(hrefId).toBe(id);
+      expect(toc).toContain(`href="#${id}"`);
+    }
+    expect(html).toContain(
+      'aria-label="Link to section: Why use a hybrid design?"',
+    );
+    expect(html).not.toMatch(
+      /<script[^>]+src="https:\/\/(?:www\.)?(?:linkedin|facebook|pinterest)\.com/i,
+    );
+  });
 });
