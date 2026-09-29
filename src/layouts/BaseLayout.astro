@@ -1,0 +1,88 @@
+---
+import Header from '../components/Header.astro';
+import '../styles/global.css';
+import { themeBootstrap } from '../lib/theme-bootstrap';
+import { absoluteSiteUrl } from '../lib/seo';
+const {
+  title,
+  description,
+  canonical = Astro.url.pathname,
+  type = 'website',
+  jsonLd,
+  socialImage,
+} = Astro.props;
+const canonicalUrl = absoluteSiteUrl(canonical);
+const socialImageUrl = socialImage
+  ? absoluteSiteUrl(socialImage.url)
+  : undefined;
+---
+
+<!doctype html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalUrl} />
+    <meta property="og:type" content={type} />
+    <meta property="og:site_name" content="Engineering Notes" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta
+      name="twitter:card"
+      content={socialImage ? 'summary_large_image' : 'summary'}
+    />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    {
+      socialImageUrl && (
+        <>
+          <meta property="og:image" content={socialImageUrl} />
+          <meta property="og:image:width" content={socialImage.width} />
+          <meta property="og:image:height" content={socialImage.height} />
+          <meta property="og:image:alt" content={socialImage.alt} />
+          <meta name="twitter:image" content={socialImageUrl} />
+          <meta name="twitter:image:alt" content={socialImage.alt} />
+        </>
+      )
+    }
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title="Engineering Notes"
+      href="/rss.xml"
+    />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    {
+      jsonLd && (
+        <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+      )
+    }
+    <script is:inline set:html={themeBootstrap} />
+    <script is:inline type="module" src="/scripts/theme.js"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <div class="site-shell">
+      <Header />
+      <main id="main"><slot /></main>
+      <footer class="site-footer">
+        <p>
+          Written by <a href="/about/">Jurol James Cabaluna</a>, Senior Software
+          Engineer.
+        </p>
+        <p>
+          <a href="/rss.xml">RSS</a><span aria-hidden="true"> · </span><a
+            href="https://jurolc.com">Portfolio</a
+          ><span aria-hidden="true"> · </span><a
+            href="https://github.com/jurol-james">GitHub</a
+          >
+        </p>
+      </footer>
+    </div>
+  </body>
+</html>

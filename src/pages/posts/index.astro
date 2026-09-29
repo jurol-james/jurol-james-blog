@@ -1,0 +1,48 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { productionPosts, readingTime, tagSlug } from '../../lib/posts';
+const posts = productionPosts(await getCollection('posts'));
+---
+
+<BaseLayout
+  title="Articles — Engineering Notes"
+  description="Technical articles on cryptography, Java, architecture, and software engineering."
+  canonical="/posts/"
+>
+  <section class="page-intro">
+    <p class="eyebrow">The archive</p><h1>Articles</h1><p>
+      Notes on the systems, tools, and ideas that shape the work.
+    </p>
+  </section>
+  <div class="article-list">
+    {
+      posts.map((post) => (
+        <article class="archive-entry">
+          <div class="article-meta">
+            <>
+              <time datetime={post.data.publishedAt.toISOString()}>
+                {post.data.publishedAt.toLocaleDateString('en', {
+                  dateStyle: 'long',
+                  timeZone: 'UTC',
+                })}
+              </time>
+              <span>{readingTime(post.body ?? '')} min read</span>
+            </>
+          </div>
+          <>
+            <h2>
+              <a href={`/posts/${post.id}/`}>{post.data.title}</a>
+            </h2>
+            <p>{post.data.description}</p>
+          </>
+          <div class="topic-list compact">
+            {post.data.tags.map((tag) => (
+              <a href={`/tags/${tagSlug(tag)}/`}>{tag}</a>
+            ))}
+          </div>
+        </article>
+      ))
+    }
+  </div>
+</BaseLayout>

@@ -1,0 +1,129 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { productionPosts, readingTime, tagSlug } from '../lib/posts';
+const posts = productionPosts(await getCollection('posts'));
+const featured = posts.find((post) => post.data.featured) ?? posts[0];
+const latest = posts.slice(0, 4);
+const allTags = [...new Set(posts.flatMap((post) => post.data.tags))];
+const person = {
+  '@type': 'Person',
+  name: 'Jurol James Cabaluna',
+  url: 'https://jurolc.com',
+  sameAs: [
+    'https://github.com/jurol-james',
+    'https://www.linkedin.com/in/jurol/',
+  ],
+};
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Blog',
+  name: 'Engineering Notes',
+  url: 'https://blog.jurolc.com',
+  author: person,
+};
+---
+
+<BaseLayout
+  title="Engineering Notes — Jurol James"
+  description="Writing about post-quantum cryptography, Java, software architecture, and lessons from building real systems."
+  jsonLd={jsonLd}
+>
+  <section class="intro">
+    <p class="eyebrow">
+      Engineering Notes <span class="eyebrow-rule"></span> by Jurol James Cabaluna
+    </p>
+    <h1>Ideas from the work<br />of building software.</h1>
+    <p class="intro-copy">
+      Writing about post-quantum cryptography, Java, software architecture, and
+      lessons from building real systems.
+    </p>
+    <a class="text-link" href="/posts/"
+      >Browse all articles <span aria-hidden="true">→</span></a
+    >
+  </section>
+  {
+    featured && (
+      <section class="featured-section" aria-labelledby="featured-heading">
+        <div class="section-heading">
+          <>
+            <h2 id="featured-heading">Featured article</h2>
+            <span>01 / FIELD NOTES</span>
+          </>
+        </div>
+        <article class="featured-article">
+          <div class="featured-index" aria-hidden="true">
+            01
+          </div>
+          <div class="featured-content">
+            <p class="eyebrow">Post-Quantum Cryptography</p>
+            <h3>
+              <a href={`/posts/${featured.id}/`}>{featured.data.title}</a>
+            </h3>
+            <p class="article-description">{featured.data.description}</p>
+            <div class="article-meta">
+              <>
+                <time datetime={featured.data.publishedAt.toISOString()}>
+                  {featured.data.publishedAt.toLocaleDateString('en', {
+                    dateStyle: 'long',
+                    timeZone: 'UTC',
+                  })}
+                </time>
+                <span>{readingTime(featured.body ?? '')} min read</span>
+              </>
+            </div>
+            <a class="text-link" href={`/posts/${featured.id}/`}>
+              Read article <span aria-hidden="true">→</span>
+            </a>
+          </div>
+        </article>
+      </section>
+    )
+  }
+  <section class="latest-section" aria-labelledby="latest-heading">
+    <div class="section-heading">
+      <h2 id="latest-heading">Latest articles</h2><a href="/posts/"
+        >View archive <span aria-hidden="true">→</span></a
+      >
+    </div>
+    {
+      latest.length ? (
+        <div class="article-list">
+          {latest.map((post) => (
+            <a class="article-row" href={`/posts/${post.id}/`}>
+              <time datetime={post.data.publishedAt.toISOString()}>
+                {post.data.publishedAt.toLocaleDateString('en', {
+                  month: 'short',
+                  day: 'numeric',
+                  year: 'numeric',
+                  timeZone: 'UTC',
+                })}
+              </time>
+              <span class="row-title">{post.data.title}</span>
+              <span class="row-arrow" aria-hidden="true">
+                ↗
+              </span>
+            </a>
+          ))}
+        </div>
+      ) : (
+        <p class="quiet-note">More field notes are in progress.</p>
+      )
+    }
+  </section>
+  <section class="topics-section" aria-labelledby="topics-heading">
+    <div class="section-heading">
+      <h2 id="topics-heading">Topics</h2><span>Areas of ongoing curiosity</span>
+    </div>
+    <div class="topic-list">
+      {
+        allTags.map((tag) => (
+          <a href={'/tags/' + tagSlug(tag) + '/'}>
+            {tag}
+            <span aria-hidden="true"> ↗</span>
+          </a>
+        ))
+      }
+    </div>
+  </section>
+</BaseLayout>
