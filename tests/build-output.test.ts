@@ -108,6 +108,9 @@ describe('built article image output', () => {
     expect(shareSection).toContain('aria-label="Copy article link"');
     expect(shareSection).toContain(`data-copy-url="${canonicalUrl}"`);
     expect(shareSection).toContain('role="status" aria-live="polite"');
+    expect(html).toContain(
+      '<script type="module" src="/scripts/article-sharing.js"></script>',
+    );
 
     const socialLinks = [
       ...(shareSection ?? '').matchAll(

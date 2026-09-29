@@ -13,7 +13,7 @@ import {
   headingPermalinks,
   type HastNode,
 } from '../src/lib/rehype-heading-permalinks';
-import { copyArticleLink } from '../src/scripts/article-sharing';
+import { copyArticleLink } from '../public/scripts/article-sharing.js';
 import {
   nextTheme,
   persistTheme,
@@ -128,7 +128,7 @@ describe('article sharing', () => {
       writeText: async (value: string) => {
         writes.push(value);
       },
-    };
+    } as unknown as Clipboard;
     expect(await copyArticleLink(canonicalUrl, clipboard)).toBe(true);
     expect(writes).toEqual([canonicalUrl]);
     expect(
@@ -136,7 +136,7 @@ describe('article sharing', () => {
         writeText: async () => {
           throw new Error('permission denied');
         },
-      }),
+      } as unknown as Clipboard),
     ).toBe(false);
   });
 
@@ -386,6 +386,7 @@ describe('deployment policy and primary navigation', () => {
       expect(values[key]).toBeTruthy();
     }
     expect(values['Content-Security-Policy']).not.toContain('unsafe-eval');
+    expect(values['Content-Security-Policy']).not.toContain("'unsafe-inline'");
     expect(values['Content-Security-Policy']).toMatch(
       /(?:^|;\s*)img-src 'self'(?:\s|;)/,
     );

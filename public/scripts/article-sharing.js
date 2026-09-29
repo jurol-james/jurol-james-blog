@@ -1,9 +1,6 @@
 const COPY_FEEDBACK_MS = 2200;
 
-export async function copyArticleLink(
-  url: string,
-  clipboard: Pick<Clipboard, 'writeText'> = navigator.clipboard,
-) {
+export async function copyArticleLink(url, clipboard = navigator.clipboard) {
   try {
     await clipboard.writeText(url);
     return true;
@@ -12,10 +9,8 @@ export async function copyArticleLink(
   }
 }
 
-export function attachArticleShareHandlers(root: ParentNode = document) {
-  const buttons = root.querySelectorAll<HTMLButtonElement>(
-    '.copy-article-link[data-copy-url]',
-  );
+export function attachArticleShareHandlers(root = document) {
+  const buttons = root.querySelectorAll('.copy-article-link[data-copy-url]');
 
   for (const button of buttons) {
     if (button.dataset.copyReady === 'true') continue;
@@ -25,8 +20,8 @@ export function attachArticleShareHandlers(root: ParentNode = document) {
       const url = button.dataset.copyUrl;
       const status = button
         .closest('.article-share')
-        ?.querySelector<HTMLElement>('[data-share-status]');
-      const label = button.querySelector<HTMLElement>('[data-copy-label]');
+        ?.querySelector('[data-share-status]');
+      const label = button.querySelector('[data-copy-label]');
       if (!url || !status || !label) return;
 
       const copied = await copyArticleLink(url);
