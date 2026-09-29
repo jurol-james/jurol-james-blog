@@ -15,7 +15,8 @@
     "lint": "eslint .",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "test": "vitest run",
+    "test": "vitest run tests/site.test.ts",
+    "test:output": "vitest run tests/build-output.test.ts",
     "typecheck": "astro check && tsc --noEmit"
   },
   "dependencies": {

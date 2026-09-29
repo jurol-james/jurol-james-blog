@@ -1,6 +1,9 @@
 ---
 title: 'Post-Quantum Cryptography: What Software Engineers Need to Know'
 description: 'A practical introduction to the quantum threat, ML-KEM, hybrid key establishment, and the engineering work behind a careful migration.'
+coverImage: ./images/pqc-transition-cover.webp
+coverImageAlt: 'Diagram showing RSA and elliptic-curve cryptography, the future quantum threat from Shor’s algorithm, and a post-quantum approach combining ML-KEM with AES-256-GCM.'
+coverImageCaption: 'A transition view: ML-KEM establishes shared secret material while AES-256-GCM continues to protect application data.'
 publishedAt: 2026-09-29
 tags:
   - Post-Quantum Cryptography
@@ -78,6 +81,10 @@ That is why ML-KEM is not “quantum AES.” ML-KEM is a public-key key-establis
 During a transition, a protocol may combine a classical key agreement such as elliptic-curve Diffie–Hellman with ML-KEM. The intent is to retain security if at least one component remains secure, provided the combination and implementation are designed correctly. This is called hybrid key establishment. It is not achieved merely by encrypting the same file twice or concatenating two values in an ad hoc way.
 
 A typical high-level flow is:
+
+![Diagram showing ML-KEM key encapsulation combined with AES-256-GCM authenticated encryption before producing encrypted data.](./images/pqc-hybrid-encryption-overview.webp)
+
+The distinction in the diagram is deliberate: ML-KEM establishes shared secret material, while AES-256-GCM encrypts and authenticates the data using derived key material.
 
 ```text
 classical key agreement ─┐

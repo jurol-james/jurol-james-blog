@@ -1,8 +1,10 @@
 ---
 import { getCollection, render } from 'astro:content';
+import { getImage, Image } from 'astro:assets';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { productionPosts, readingTime, tagSlug } from '../../lib/posts';
 import { numberHeadings } from '../../lib/toc';
+import { absoluteSiteUrl } from '../../lib/seo';
 export async function getStaticPaths() {
   return productionPosts(await getCollection('posts')).map((post) => ({
     params: { slug: post.id },
@@ -16,6 +18,17 @@ const previous = posts[index + 1];
 const next = posts[index - 1];
 const { Content, headings } = await render(post);
 const tocHeadings = numberHeadings(headings);
+const socialImage = post.data.coverImage
+  ? await getImage({
+      src: post.data.coverImage,
+      width: 1200,
+      format: 'jpeg',
+      quality: 88,
+    })
+  : undefined;
+const socialImageUrl = socialImage
+  ? absoluteSiteUrl(socialImage.src)
+  : undefined;
 const person = {
   '@type': 'Person',
   name: 'Jurol James Cabaluna',
@@ -31,6 +44,7 @@ const jsonLd = {
   headline: post.data.title,
   description: post.data.description,
   datePublished: post.data.publishedAt.toISOString(),
+  ...(socialImageUrl ? { image: socialImageUrl } : {}),
   ...(post.data.updatedAt
     ? { dateModified: post.data.updatedAt.toISOString() }
     : {}),
@@ -47,6 +61,12 @@ const jsonLd = {
   canonical={`/posts/${post.id}/`}
   type="article"
   jsonLd={jsonLd}
+  socialImage={socialImage && {
+    url: socialImage.src,
+    width: socialImage.attributes.width,
+    height: socialImage.attributes.height,
+    alt: post.data.coverImageAlt,
+  }}
 >
   <article class="post-page">
     <a class="back-link" href="/posts/">← All articles</a>
@@ -59,7 +79,26 @@ const jsonLd = {
           </p>
         )
       }
-      <h1>{post.data.title}</h1><p class="post-deck">{post.data.description}</p>
+      <h1>{post.data.title}</h1>
+      {
+        post.data.coverImage && (
+          <figure class="post-cover">
+            <Image
+              src={post.data.coverImage}
+              alt={post.data.coverImageAlt!}
+              sizes="(min-width: 768px) 720px, calc(100vw - 30px)"
+              layout="constrained"
+              quality={90}
+              loading="eager"
+              fetchpriority="high"
+            />
+            {post.data.coverImageCaption && (
+              <figcaption>{post.data.coverImageCaption}</figcaption>
+            )}
+          </figure>
+        )
+      }
+      <p class="post-deck">{post.data.description}</p>
       <div class="article-meta">
         <span>By <a href="/about/">Jurol James Cabaluna</a></span><time
           datetime={post.data.publishedAt.toISOString()}

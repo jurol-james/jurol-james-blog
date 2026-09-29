@@ -388,6 +388,31 @@ main {
 .post-header .eyebrow {
   margin-bottom: 17px;
 }
+.post-cover {
+  margin: 28px 0 27px;
+}
+.post-cover img,
+.prose figure img,
+.prose p > img {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  border: 1px solid var(--color-border);
+  border-radius: 3px;
+  background: var(--color-surface);
+}
+.post-cover figcaption,
+.prose figure figcaption {
+  max-width: 65ch;
+  margin: 10px auto 0;
+  color: var(--color-text-muted);
+  font-size: 13px;
+  line-height: 1.55;
+}
+.prose figure.article-figure {
+  margin: 2.3em 0;
+}
 .post-header h1 {
   font-size: clamp(39px, 6vw, 57px);
   line-height: 1.12;

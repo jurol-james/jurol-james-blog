@@ -1,11 +1,13 @@
 import { describe, expect, it } from 'vitest';
 import { postUrl, productionPosts, rssItems, tagSlug } from '../src/lib/posts';
 import type { Post } from '../src/lib/posts';
-import { postSchema } from '../src/content/schema';
+import { z } from 'astro/zod';
+import { createPostSchema } from '../src/content/schema';
 import { readFile } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 import { themeBootstrap } from '../src/lib/theme-bootstrap';
 import { numberHeadings } from '../src/lib/toc';
+import { absoluteSiteUrl } from '../src/lib/seo';
 import {
   nextTheme,
   persistTheme,
@@ -151,6 +153,8 @@ const fixture = (id: string, publishedAt: string, draft = false) =>
     },
   }) as Post;
 
+const postSchema = createPostSchema(z.string().min(1));
+
 describe('post helpers', () => {
   it('validates post frontmatter and supplies safe defaults', () => {
     const valid = postSchema.safeParse({
@@ -173,6 +177,50 @@ describe('post helpers', () => {
     ).toBe(false);
   });
 
+  it('allows posts without covers and requires descriptive alt text when one exists', () => {
+    const base = {
+      title: 'A note',
+      description: 'A short description',
+      publishedAt: '2026-09-29',
+    };
+    expect(postSchema.safeParse(base).success).toBe(true);
+    expect(
+      postSchema.safeParse({
+        ...base,
+        coverImage: './cover.webp',
+      }).success,
+    ).toBe(false);
+    expect(
+      postSchema.safeParse({
+        ...base,
+        coverImage: './cover.webp',
+        coverImageAlt: 'A technical diagram of a migration path.',
+      }).success,
+    ).toBe(true);
+    expect(
+      postSchema.safeParse({
+        ...base,
+        coverImageCaption: 'A caption without an image.',
+      }).success,
+    ).toBe(false);
+  });
+
+  it('uses the cover and a relevant inline diagram in the PQC article', async () => {
+    const article = await readFile(
+      new URL(
+        '../src/content/posts/post-quantum-cryptography-engineers.md',
+        import.meta.url,
+      ),
+      'utf8',
+    );
+    expect(article).toContain('coverImage: ./images/pqc-transition-cover.webp');
+    expect(article).toContain('coverImageAlt:');
+    expect(article).toContain(
+      '![Diagram showing ML-KEM key encapsulation combined with AES-256-GCM',
+    );
+    expect(article).not.toMatch(/(?:C:\\Users|\/mnt\/c\/Users)/i);
+  });
+
   it('filters drafts and sorts published entries newest first', () => {
     const posts = productionPosts([
       fixture('older', '2025-01-01'),
@@ -192,6 +240,12 @@ describe('post helpers', () => {
   it('uses the production origin for canonical article URLs', () => {
     expect(postUrl('example-note')).toBe(
       'https://blog.jurolc.com/posts/example-note',
+    );
+  });
+
+  it('builds absolute production URLs for social images', () => {
+    expect(absoluteSiteUrl('/_astro/cover.abc123.webp')).toBe(
+      'https://blog.jurolc.com/_astro/cover.abc123.webp',
     );
   });
 
@@ -227,6 +281,9 @@ describe('deployment policy and primary navigation', () => {
       expect(values[key]).toBeTruthy();
     }
     expect(values['Content-Security-Policy']).not.toContain('unsafe-eval');
+    expect(values['Content-Security-Policy']).toMatch(
+      /(?:^|;\s*)img-src 'self'(?:\s|;)/,
+    );
     expect(values['Content-Security-Policy']).not.toMatch(
       /(?:^|\s|;|:)\*(?:\s|;|$)/,
     );
