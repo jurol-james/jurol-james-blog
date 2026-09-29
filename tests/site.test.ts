@@ -122,4 +122,25 @@ describe('deployment policy and primary navigation', () => {
       expect(header).toContain(destination);
     }
   });
+
+  it('links the experimental Zerp project references', async () => {
+    const article = await readFile(
+      new URL(
+        '../src/content/posts/post-quantum-cryptography-engineers.md',
+        import.meta.url,
+      ),
+      'utf8',
+    );
+    expect(article).toContain(
+      'https://github.com/jurol-james/zerp-quantum-crypto',
+    );
+    expect(article).toContain(
+      'https://central.sonatype.com/artifact/io.github.jurol-james/zerp-quantum-crypto',
+    );
+    const about = await readFile(
+      new URL('../src/pages/about.astro', import.meta.url),
+      'utf8',
+    );
+    expect(about).toContain('https://www.linkedin.com/in/jurol/');
+  });
 });
