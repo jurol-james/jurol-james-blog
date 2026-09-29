@@ -4,6 +4,38 @@ import { describe, expect, it } from 'vitest';
 const articlePath = 'dist/posts/post-quantum-cryptography-engineers/index.html';
 
 describe('built article image output', () => {
+  it('serves the Jurol favicon, touch icon, and decorative header mark', async () => {
+    const html = await readFile(articlePath, 'utf8');
+    for (const link of [
+      'rel="icon" href="/favicon.svg"',
+      'rel="icon" href="/favicon.ico"',
+      'rel="icon" href="/favicon-32x32.png"',
+      'rel="apple-touch-icon" href="/apple-touch-icon.png"',
+    ]) {
+      expect(html).toContain(link);
+    }
+    expect(html).toContain('src="/favicon.svg"');
+    expect(html).toContain('alt="" aria-hidden="true"');
+    for (const asset of [
+      'dist/favicon.ico',
+      'dist/favicon-32x32.png',
+      'dist/apple-touch-icon.png',
+    ]) {
+      expect((await readFile(asset)).byteLength).toBeGreaterThan(0);
+    }
+    const svg = await readFile('dist/favicon.svg', 'utf8');
+    expect(svg).toContain('<path');
+    expect(svg).not.toContain('<image');
+    expect(svg).not.toContain('data:image');
+    expect(svg).not.toContain('<rect');
+    const icon = await readFile('dist/favicon.ico');
+    expect(icon.readUInt16LE(2)).toBe(1);
+    expect(icon.readUInt16LE(4)).toBe(3);
+    expect([0, 1, 2].map((index) => icon[index * 16 + 6])).toEqual([
+      16, 32, 48,
+    ]);
+  });
+
   it('renders the article title, cover, deck, metadata, and body in order', async () => {
     const html = await readFile(articlePath, 'utf8');
     const title = html.indexOf(

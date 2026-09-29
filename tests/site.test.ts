@@ -437,6 +437,10 @@ describe('deployment policy and primary navigation', () => {
     ]) {
       expect(header).toContain(destination);
     }
+    expect(header).toContain('src="/favicon.svg"');
+    expect(header).toContain('alt=""');
+    expect(header).toContain('aria-hidden="true"');
+    expect(header).toContain('Engineering Notes');
   });
 
   it('links the experimental Zerp project references', async () => {
