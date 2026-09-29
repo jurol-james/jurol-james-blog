@@ -1,0 +1,82 @@
+---
+import { articleShareUrls } from '../lib/sharing';
+
+const { canonicalUrl, title, description, mediaUrl } = Astro.props;
+const urls = articleShareUrls({ canonicalUrl, title, description, mediaUrl });
+---
+
+<section class="article-share" aria-labelledby="share-heading">
+  <h2 id="share-heading">Share this article</h2>
+  <ul class="share-actions">
+    <li>
+      <a
+        href={urls.linkedin}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Share on LinkedIn"
+        title="Share on LinkedIn"
+      >
+        <svg aria-hidden="true" viewBox="0 0 24 24" focusable="false">
+          <path
+            d="M5.2 8.4H2V22h3.2V8.4ZM3.6 2a1.9 1.9 0 1 0 0 3.8 1.9 1.9 0 0 0 0-3.8ZM22 13.2c0-4.1-2.2-6-5.1-6a4.4 4.4 0 0 0-3.9 2.1V8.4H9.8V22H13v-7.2c0-1.9.4-3.7 2.7-3.7s2.4 2.1 2.4 3.8V22h3.2l.7-8.8Z"
+          ></path>
+        </svg>
+        <span>LinkedIn</span>
+      </a>
+    </li>
+    <li>
+      <a
+        href={urls.facebook}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Share on Facebook"
+        title="Share on Facebook"
+      >
+        <svg aria-hidden="true" viewBox="0 0 24 24" focusable="false">
+          <path
+            d="M13.5 22v-9.1h3.1l.5-3.6h-3.6V7c0-1 .3-1.7 1.8-1.7h1.9V2.1c-.9-.1-1.8-.2-2.7-.2-2.7 0-4.6 1.7-4.6 4.8v2.6H6.8v3.6h3.1V22h3.6Z"
+          ></path>
+        </svg>
+        <span>Facebook</span>
+      </a>
+    </li>
+    <li>
+      <a
+        href={urls.pinterest}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Share on Pinterest"
+        title="Share on Pinterest"
+      >
+        <svg aria-hidden="true" viewBox="0 0 24 24" focusable="false">
+          <path
+            d="M12 2a10 10 0 0 0-3.6 19.3c0-.8 0-1.8.2-2.7l1.3-5.5s-.3-.6-.3-1.5c0-1.4.8-2.5 1.9-2.5.9 0 1.3.7 1.3 1.5 0 .9-.6 2.3-.9 3.5-.2 1 .5 1.8 1.5 1.8 1.8 0 3.1-2.3 3.1-5.1 0-2.1-1.4-3.7-4-3.7-2.9 0-4.7 2.1-4.7 4.5 0 .8.2 1.4.6 1.9.2.2.2.3.1.6l-.2.8c-.1.3-.3.4-.6.3-1.3-.5-1.9-1.9-1.9-3.5 0-2.6 2.2-5.8 6.6-5.8 3.5 0 5.8 2.5 5.8 5.2 0 3.6-2 6.3-4.9 6.3-1 0-2-.6-2.3-1.2l-.7 2.7c-.2 1-.8 1.9-1.2 2.7A10 10 0 1 0 12 2Z"
+          ></path>
+        </svg>
+        <span>Pinterest</span>
+      </a>
+    </li>
+    <li>
+      <button
+        type="button"
+        class="copy-article-link"
+        data-copy-url={urls.copy}
+        aria-label="Copy article link"
+      >
+        <svg aria-hidden="true" viewBox="0 0 24 24" focusable="false">
+          <path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7.1-7.1l-1.7 1.7"
+          ></path>
+          <path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7.1 7.1l1.7-1.7"
+          ></path>
+        </svg>
+        <span data-copy-label>Copy link</span>
+      </button>
+    </li>
+  </ul>
+  <p class="share-status" role="status" aria-live="polite" data-share-status>
+  </p>
+</section>
+
+<script>
+  import '../scripts/article-sharing';
+</script>

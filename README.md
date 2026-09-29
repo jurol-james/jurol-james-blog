@@ -29,6 +29,8 @@ draft: true
 
 Optional fields are `updatedAt`, `series`, and positive integer `seriesOrder`. Markdown is the article body. The `title`, `description`, and `publishedAt` fields are required and validated at build time. Astro renders Markdown headings with stable anchors and syntax highlights fenced code with Prism and local CSS.
 
+Article pages automatically include LinkedIn, Facebook, Pinterest, and copy-link sharing. Share links use the canonical production URL; no third-party social SDKs or tracking scripts are loaded. H2 and H3 headings automatically receive permalinks that use the same IDs as the table of contents.
+
 ### Article images
 
 Keep article assets beside the Markdown collection in `src/content/posts/images/`. Image paths in frontmatter and Markdown are relative to the article file. Astro's content collection image schema validates cover files, and its image pipeline creates optimized responsive output.

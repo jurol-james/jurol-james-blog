@@ -8,6 +8,12 @@ import { createHash } from 'node:crypto';
 import { themeBootstrap } from '../src/lib/theme-bootstrap';
 import { numberHeadings } from '../src/lib/toc';
 import { absoluteSiteUrl } from '../src/lib/seo';
+import { articleShareUrls } from '../src/lib/sharing';
+import {
+  headingPermalinks,
+  type HastNode,
+} from '../src/lib/rehype-heading-permalinks';
+import { copyArticleLink } from '../src/scripts/article-sharing';
 import {
   nextTheme,
   persistTheme,
@@ -76,6 +82,105 @@ describe('table of contents', () => {
     );
     expect(styles).toMatch(/\.toc a\s*\{[^}]*overflow-wrap:\s*anywhere/s);
     expect(styles).not.toContain('.toc-depth-3');
+  });
+});
+
+describe('article sharing', () => {
+  const canonicalUrl =
+    'https://blog.jurolc.com/posts/post-quantum-cryptography-engineers/';
+  const article = {
+    canonicalUrl,
+    title: 'Post-Quantum Cryptography',
+    description: 'A practical engineering introduction.',
+    mediaUrl: 'https://blog.jurolc.com/_astro/pqc-cover.abc.webp',
+  };
+
+  it('builds clean LinkedIn and Facebook share URLs from the canonical URL', () => {
+    const urls = articleShareUrls(article);
+    expect(new URL(urls.linkedin).searchParams.get('url')).toBe(canonicalUrl);
+    expect(new URL(urls.facebook).searchParams.get('u')).toBe(canonicalUrl);
+    expect(urls.linkedin).toContain(encodeURIComponent(canonicalUrl));
+    expect(urls.facebook).toContain(encodeURIComponent(canonicalUrl));
+    expect(urls.linkedin + urls.facebook).not.toMatch(
+      /vercel\.app|localhost|utm_|fbclid=/i,
+    );
+    expect(urls.copy).toBe(canonicalUrl);
+  });
+
+  it('uses canonical Pinterest URL, article description, and optional cover media', () => {
+    const withCover = new URL(articleShareUrls(article).pinterest);
+    expect(withCover.searchParams.get('url')).toBe(canonicalUrl);
+    expect(withCover.searchParams.get('media')).toBe(article.mediaUrl);
+    expect(withCover.searchParams.get('description')).toBe(
+      `${article.title} — ${article.description}`,
+    );
+
+    const withoutCover = new URL(
+      articleShareUrls({ ...article, mediaUrl: undefined }).pinterest,
+    );
+    expect(withoutCover.searchParams.get('url')).toBe(canonicalUrl);
+    expect(withoutCover.searchParams.has('media')).toBe(false);
+  });
+
+  it('copies the canonical article URL and reports clipboard failures', async () => {
+    const writes: string[] = [];
+    const clipboard = {
+      writeText: async (value: string) => {
+        writes.push(value);
+      },
+    };
+    expect(await copyArticleLink(canonicalUrl, clipboard)).toBe(true);
+    expect(writes).toEqual([canonicalUrl]);
+    expect(
+      await copyArticleLink(canonicalUrl, {
+        writeText: async () => {
+          throw new Error('permission denied');
+        },
+      }),
+    ).toBe(false);
+  });
+
+  it('adds accessible permalinks without changing existing heading IDs', () => {
+    const tree: HastNode = {
+      type: 'root',
+      children: [
+        {
+          type: 'element',
+          tagName: 'h2',
+          properties: { id: 'why-use-a-hybrid-design' },
+          children: [{ type: 'text', value: 'Why use a hybrid design?' }],
+        },
+        {
+          type: 'element',
+          tagName: 'h3',
+          properties: { id: 'key-encapsulation' },
+          children: [{ type: 'text', value: 'Key encapsulation' }],
+        },
+      ],
+    };
+    const headings = tree.children!;
+    const plugin = headingPermalinks();
+    const textContent = (node: HastNode): string =>
+      node.type === 'text'
+        ? (node.value ?? '')
+        : (node.children ?? []).map(textContent).join('');
+    const ctx = {
+      appendChild: (node: HastNode, child: HastNode) => {
+        (node.children ??= []).push(child);
+      },
+      textContent,
+    };
+    plugin.element.visit(headings[0], ctx);
+    plugin.element.visit(headings[1], ctx);
+    expect(headings[0].properties?.id).toBe('why-use-a-hybrid-design');
+    expect(headings[1].properties?.id).toBe('key-encapsulation');
+    expect(headings[0].children?.[1].properties).toMatchObject({
+      href: '#why-use-a-hybrid-design',
+      ariaLabel: 'Link to section: Why use a hybrid design?',
+    });
+    expect(headings[1].children?.[1].properties?.href).toBe(
+      '#key-encapsulation',
+    );
   });
 });
 

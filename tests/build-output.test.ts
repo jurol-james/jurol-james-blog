@@ -91,4 +91,61 @@ describe('built article image output', () => {
       'https://central.sonatype.com/artifact/io.github.jurol-james/zerp-quantum-crypto',
     );
   });
+
+  it('renders canonical share links and heading permalinks matching the TOC', async () => {
+    const html = await readFile(articlePath, 'utf8');
+    const toc = html.match(/<nav class="toc"[\s\S]*?<\/nav>/)?.[0];
+    const canonicalUrl =
+      'https://blog.jurolc.com/posts/post-quantum-cryptography-engineers/';
+    const shareSection = html.match(
+      /<section class="article-share"[\s\S]*?<\/section>/,
+    )?.[0];
+
+    expect(shareSection).toContain('Share this article');
+    expect(shareSection).toContain('aria-label="Share on LinkedIn"');
+    expect(shareSection).toContain('aria-label="Share on Facebook"');
+    expect(shareSection).toContain('aria-label="Share on Pinterest"');
+    expect(shareSection).toContain('aria-label="Copy article link"');
+    expect(shareSection).toContain(`data-copy-url="${canonicalUrl}"`);
+    expect(shareSection).toContain('role="status" aria-live="polite"');
+
+    const socialLinks = [
+      ...(shareSection ?? '').matchAll(
+        /<a href="(https:\/\/www\.(?:linkedin|facebook|pinterest)\.com[^\"]+)" target="_blank" rel="noopener noreferrer"/g,
+      ),
+    ];
+    expect(socialLinks).toHaveLength(3);
+    for (const [, href] of socialLinks) {
+      const url = new URL(href.replaceAll('&amp;', '&'));
+      const target = url.searchParams.get('url') ?? url.searchParams.get('u');
+      expect(target).toBe(canonicalUrl);
+      expect(href).not.toMatch(/vercel\.app|localhost|utm_|fbclid=/i);
+    }
+    const pinterest = new URL(
+      socialLinks
+        .find(([, href]) => href.includes('pinterest.com'))![1]
+        .replaceAll('&amp;', '&'),
+    );
+    expect(pinterest.searchParams.get('media')).toMatch(
+      /^https:\/\/blog\.jurolc\.com\/_astro\//,
+    );
+
+    const headingPermalinks = [
+      ...html.matchAll(
+        /<h([23]) id="([^"]+)">[\s\S]*?<a href="#([^"]+)" class="heading-permalink" aria-label="Link to section: ([^"]+)"/g,
+      ),
+    ];
+    expect(headingPermalinks.some(([, level]) => level === '2')).toBe(true);
+    expect(headingPermalinks.some(([, level]) => level === '3')).toBe(true);
+    for (const [, , id, hrefId] of headingPermalinks) {
+      expect(hrefId).toBe(id);
+      expect(toc).toContain(`href="#${id}"`);
+    }
+    expect(html).toContain(
+      'aria-label="Link to section: Why use a hybrid design?"',
+    );
+    expect(html).not.toMatch(
+      /<script[^>]+src="https:\/\/(?:www\.)?(?:linkedin|facebook|pinterest)\.com/i,
+    );
+  });
 });
