@@ -100,6 +100,14 @@ describe('deployment policy and primary navigation', () => {
     );
   });
 
+  it('pins Vercel to the static Astro output directory', async () => {
+    const config = JSON.parse(
+      await readFile(new URL('../vercel.json', import.meta.url), 'utf8'),
+    ) as { framework: string; outputDirectory: string };
+    expect(config.framework).toBe('astro');
+    expect(config.outputDirectory).toBe('dist');
+  });
+
   it('includes the requested primary destinations in the header', async () => {
     const header = await readFile(
       new URL('../src/components/Header.astro', import.meta.url),

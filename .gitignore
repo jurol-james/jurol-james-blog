@@ -8,3 +8,4 @@ dist/
 !.env.example
 coverage/
 .DS_Store
+.vercel
