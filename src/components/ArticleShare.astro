@@ -1,12 +1,35 @@
 ---
 import { articleShareUrls } from '../lib/sharing';
 
-const { canonicalUrl, title, description, mediaUrl } = Astro.props;
+interface Props {
+  canonicalUrl: string;
+  title: string;
+  description: string;
+  mediaUrl?: string;
+  variant?: 'compact' | 'full';
+}
+
+const {
+  canonicalUrl,
+  title,
+  description,
+  mediaUrl,
+  variant = 'full',
+} = Astro.props;
 const urls = articleShareUrls({ canonicalUrl, title, description, mediaUrl });
 ---
 
-<section class="article-share" aria-labelledby="share-heading">
-  <h2 id="share-heading">Share this article</h2>
+<section
+  class:list={['article-share', `article-share--${variant}`]}
+  aria-label="Share this article"
+>
+  {
+    variant === 'compact' ? (
+      <p class="share-compact-label">Share</p>
+    ) : (
+      <h2>Share this article</h2>
+    )
+  }
   <ul class="share-actions">
     <li>
       <a

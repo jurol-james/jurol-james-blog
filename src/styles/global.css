@@ -524,12 +524,26 @@ main {
   border-top: 1px solid var(--color-border);
   border-bottom: 1px solid var(--color-border);
 }
+.article-share--compact {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  margin: 18px 0 0;
+  padding: 0;
+  border: 0;
+}
 .article-share h2 {
   margin: 0 0 14px;
   color: var(--color-text-muted);
   font: 500 11px/1.4 var(--mono);
   letter-spacing: 0.08em;
   text-transform: uppercase;
+}
+.share-compact-label {
+  margin: 0;
+  color: var(--color-text-muted);
+  font: 500 11px/1.4 var(--mono);
 }
 .share-actions {
   display: flex;
@@ -585,6 +599,26 @@ main {
   margin: 8px 0 0;
   color: var(--color-text-muted);
   font-size: 12px;
+}
+.article-share--compact .share-actions {
+  gap: 4px;
+}
+.article-share--compact .share-actions a,
+.article-share--compact .share-actions button {
+  width: 42px;
+  min-height: 42px;
+  justify-content: center;
+  padding: 0;
+  border-color: transparent;
+  background: transparent;
+}
+.article-share--compact .share-actions span {
+  display: none;
+}
+.article-share--compact .share-status {
+  flex-basis: 100%;
+  min-height: 0;
+  margin: 0;
 }
 .prose p {
   margin: 0 0 1.4em;

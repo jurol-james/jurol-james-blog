@@ -184,6 +184,27 @@ describe('article sharing', () => {
   });
 });
 
+describe('compact article sharing presentation', () => {
+  it('wraps compact controls and preserves touch size, focus, and theme tokens', async () => {
+    const styles = await readFile(
+      new URL('../src/styles/global.css', import.meta.url),
+      'utf8',
+    );
+    expect(styles).toMatch(
+      /\.article-share--compact\s*\{[^}]*display:\s*flex;[^}]*flex-wrap:\s*wrap/s,
+    );
+    expect(styles).toMatch(
+      /\.article-share--compact \.share-actions a,[\s\S]*?\.article-share--compact \.share-actions button\s*\{[^}]*width:\s*42px;[^}]*min-height:\s*42px/s,
+    );
+    expect(styles).toMatch(
+      /\.share-actions a:focus-visible,[\s\S]*?\.share-actions button:focus-visible\s*\{[^}]*outline:/s,
+    );
+    expect(styles).toMatch(
+      /\.share-actions a,[\s\S]*?color:\s*var\(--color-text-muted\)/s,
+    );
+  });
+});
+
 describe('theme color contrast', () => {
   it('keeps text, metadata, links, focus, and code comments at WCAG AA contrast', async () => {
     const styles = await readFile(

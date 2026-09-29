@@ -134,6 +134,13 @@ const jsonLd = {
           ))
         }
       </div>
+      <ArticleShare
+        canonicalUrl={canonicalUrl}
+        title={post.data.title}
+        description={post.data.description}
+        mediaUrl={socialImageUrl}
+        variant="compact"
+      />
     </header>
     {
       headings.length >= 4 && (
@@ -160,6 +167,7 @@ const jsonLd = {
       title={post.data.title}
       description={post.data.description}
       mediaUrl={socialImageUrl}
+      variant="full"
     />
     <nav class="post-pagination" aria-label="Article navigation">
       {

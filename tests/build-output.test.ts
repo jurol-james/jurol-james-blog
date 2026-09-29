@@ -92,46 +92,84 @@ describe('built article image output', () => {
     );
   });
 
-  it('renders canonical share links and heading permalinks matching the TOC', async () => {
+  it('renders compact and full share variants with identical canonical destinations', async () => {
     const html = await readFile(articlePath, 'utf8');
     const toc = html.match(/<nav class="toc"[\s\S]*?<\/nav>/)?.[0];
     const canonicalUrl =
       'https://blog.jurolc.com/posts/post-quantum-cryptography-engineers/';
-    const shareSection = html.match(
-      /<section class="article-share"[\s\S]*?<\/section>/,
-    )?.[0];
-
-    expect(shareSection).toContain('Share this article');
-    expect(shareSection).toContain('aria-label="Share on LinkedIn"');
-    expect(shareSection).toContain('aria-label="Share on Facebook"');
-    expect(shareSection).toContain('aria-label="Share on Pinterest"');
-    expect(shareSection).toContain('aria-label="Copy article link"');
-    expect(shareSection).toContain(`data-copy-url="${canonicalUrl}"`);
-    expect(shareSection).toContain('role="status" aria-live="polite"');
+    const sections = [
+      ...html.matchAll(
+        /<section class="article-share article-share--(compact|full)" aria-label="Share this article">([\s\S]*?)<\/section>/g,
+      ),
+    ];
+    expect(sections).toHaveLength(2);
+    const compact = sections.find(([, variant]) => variant === 'compact');
+    const full = sections.find(([, variant]) => variant === 'full');
+    expect(compact).toBeDefined();
+    expect(full).toBeDefined();
+    const compactSection = compact?.[0] ?? '';
+    const fullSection = full?.[0] ?? '';
+    expect(compactSection).toContain('class="share-compact-label">Share</p>');
+    expect(compactSection).not.toContain('<h2>Share this article</h2>');
+    expect(fullSection).toContain('<h2>Share this article</h2>');
+    expect(fullSection).toContain('LinkedIn</span>');
+    expect(compactSection).toContain('role="status" aria-live="polite"');
+    expect(fullSection).toContain('role="status" aria-live="polite"');
     expect(html).toContain(
       '<script type="module" src="/scripts/article-sharing.js"></script>',
     );
 
-    const socialLinks = [
-      ...(shareSection ?? '').matchAll(
-        /<a href="(https:\/\/www\.(?:linkedin|facebook|pinterest)\.com[^\"]+)" target="_blank" rel="noopener noreferrer"/g,
-      ),
-    ];
-    expect(socialLinks).toHaveLength(3);
-    for (const [, href] of socialLinks) {
-      const url = new URL(href.replaceAll('&amp;', '&'));
-      const target = url.searchParams.get('url') ?? url.searchParams.get('u');
-      expect(target).toBe(canonicalUrl);
-      expect(href).not.toMatch(/vercel\.app|localhost|utm_|fbclid=/i);
+    const socialUrls = (section: string) => {
+      const links = [
+        ...section.matchAll(
+          /<a href="(https:\/\/www\.(?:linkedin|facebook|pinterest)\.com[^\"]+)" target="_blank" rel="noopener noreferrer" aria-label="Share on (LinkedIn|Facebook|Pinterest)"/g,
+        ),
+      ];
+      expect(links).toHaveLength(3);
+      for (const [, href, label] of links) {
+        expect(section).toContain(`aria-label="Share on ${label}"`);
+        const url = new URL(href.replaceAll('&amp;', '&'));
+        const target = url.searchParams.get('url') ?? url.searchParams.get('u');
+        expect(target).toBe(canonicalUrl);
+        expect(href).not.toMatch(/vercel\.app|localhost|utm_|fbclid=/i);
+      }
+      const pinterest = new URL(
+        links
+          .find(([, href]) => href.includes('pinterest.com'))![1]
+          .replaceAll('&amp;', '&'),
+      );
+      expect(pinterest.searchParams.get('media')).toMatch(
+        /^https:\/\/blog\.jurolc\.com\/_astro\//,
+      );
+      return links.map(([, href]) => href);
+    };
+    expect(socialUrls(compactSection)).toEqual(socialUrls(fullSection));
+
+    for (const section of [compactSection, fullSection]) {
+      expect(section.match(/data-copy-url="([^"]+)"/)?.[1]).toBe(canonicalUrl);
+      expect(section).toContain('aria-label="Copy article link"');
+      expect(section).toContain('aria-hidden="true"');
+      expect(section).not.toMatch(/\sid="/);
     }
-    const pinterest = new URL(
-      socialLinks
-        .find(([, href]) => href.includes('pinterest.com'))![1]
-        .replaceAll('&amp;', '&'),
+    expect(html.match(/data-share-status/g)).toHaveLength(2);
+    const copyButtons = [...html.matchAll(/data-copy-url="([^"]+)"/g)].map(
+      ([, url]) => url,
     );
-    expect(pinterest.searchParams.get('media')).toMatch(
-      /^https:\/\/blog\.jurolc\.com\/_astro\//,
+    expect(copyButtons).toEqual([canonicalUrl, canonicalUrl]);
+
+    const metadataStart = html.indexOf('class="article-meta"');
+    const topicsStart = html.indexOf('class="topic-list compact"');
+    const tocStart = html.indexOf('<nav class="toc"');
+    const bodyStart = html.indexOf('<div class="prose">');
+    expect(compact?.index).toBeGreaterThan(metadataStart);
+    expect(compact?.index).toBeGreaterThan(topicsStart);
+    expect(compact?.index).toBeLessThan(tocStart);
+    expect(full?.index).toBeGreaterThan(bodyStart);
+    expect(html.indexOf('class="post-pagination"')).toBeGreaterThan(
+      full?.index ?? 0,
     );
+    const ids = [...html.matchAll(/\sid="([^"]+)"/g)].map(([, id]) => id);
+    expect(new Set(ids).size).toBe(ids.length);
 
     const headingPermalinks = [
       ...html.matchAll(
