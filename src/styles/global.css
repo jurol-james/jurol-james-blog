@@ -707,6 +707,13 @@ main {
   font-size: 14px;
   margin: 1.5em 0;
 }
+.prose .table-scroll {
+  max-width: 100%;
+  overflow-x: auto;
+}
+.prose .table-scroll--wide table {
+  min-width: 620px;
+}
 .prose th,
 .prose td {
   padding: 10px 12px;
