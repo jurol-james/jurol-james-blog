@@ -2,6 +2,8 @@ import { readFile } from 'node:fs/promises';
 import { describe, expect, it } from 'vitest';
 
 const articlePath = 'dist/posts/post-quantum-cryptography-engineers/index.html';
+const gatesArticlePath =
+  'dist/posts/classical-vs-quantum-logic-gates/index.html';
 
 describe('built article image output', () => {
   it('serves the Jurol favicon, touch icon, and decorative header mark', async () => {
@@ -220,5 +222,92 @@ describe('built article image output', () => {
     expect(html).not.toMatch(
       /<script[^>]+src="https:\/\/(?:www\.)?(?:linkedin|facebook|pinterest)\.com/i,
     );
+  });
+});
+
+describe('classical and quantum logic gates article output', () => {
+  it('renders the new series, cover, deck, metadata, and corrected Bell-state figure', async () => {
+    const html = await readFile(gatesArticlePath, 'utf8');
+    const series = html.indexOf('Quantum Computing Fundamentals · Part 1');
+    const title = html.indexOf(
+      '<h1>Classical Logic Gates vs. Quantum Logic Gates: A Software Engineer’s Guide</h1>',
+    );
+    const cover = html.indexOf('<figure class="post-cover">');
+    const deck = html.indexOf('<p class="post-deck">');
+    const metadata = html.indexOf('<div class="article-meta">');
+    const body = html.indexOf('<div class="prose">');
+    expect(series).toBeGreaterThanOrEqual(0);
+    expect(title).toBeGreaterThan(series);
+    expect(cover).toBeGreaterThan(title);
+    expect(deck).toBeGreaterThan(cover);
+    expect(metadata).toBeGreaterThan(deck);
+    expect(body).toBeGreaterThan(metadata);
+    expect(html).toContain('alt="Side-by-side comparison of classical bits');
+    expect(html).toContain('Classical circuits process definite bit values;');
+    expect(html).toContain('width="975" height="781"');
+    expect(html).toContain('<figure class="article-figure">');
+    expect(html).toContain('alt="Two-qubit circuit with Hadamard');
+    expect(html).toContain('The centered dots in step 3 represent each qubit');
+    expect(html).toContain('width="972" height="779"');
+    expect(html).toContain('bell-state-circuit.');
+    const coverFigure = html.match(
+      /<figure class="post-cover">([\s\S]*?)<\/figure>/,
+    )?.[1];
+    const bellFigure = html.match(
+      /<figure class="article-figure">([\s\S]*?)<\/figure>/,
+    )?.[1];
+    for (const figure of [coverFigure, bellFigure]) {
+      expect(figure).toContain('src="/_astro/');
+      expect(figure).toContain('srcset="/_astro/');
+      expect(figure).toContain('320w');
+      expect(figure).toContain('390w');
+    }
+    for (const image of html.match(/<img\b[^>]*>/g) ?? []) {
+      expect(image).toMatch(/\bsrc="\//);
+    }
+    expect(html).not.toMatch(/(?:C:\\Users|\/mnt\/c\/Users)/);
+  });
+
+  it('uses canonical metadata, navigation, sharing, and discovery feeds', async () => {
+    const [html, rss, sitemap] = await Promise.all([
+      readFile(gatesArticlePath, 'utf8'),
+      readFile('dist/rss.xml', 'utf8'),
+      readFile('dist/sitemap-0.xml', 'utf8'),
+    ]);
+    const canonical =
+      'https://blog.jurolc.com/posts/classical-vs-quantum-logic-gates/';
+    expect(html).toContain(`<link rel="canonical" href="${canonical}">`);
+    expect(html).toContain(`<meta property="og:url" content="${canonical}">`);
+    expect(html).toMatch(
+      /<meta property="og:image" content="https:\/\/blog\.jurolc\.com\/_astro\/classical-vs-quantum-computation\.[^"]+\.jpeg">/,
+    );
+    expect(html).toContain('<meta property="og:image:width" content="975">');
+    expect(html).toContain(
+      '<meta name="twitter:card" content="summary_large_image">',
+    );
+    expect(html).toContain('"@type":"BlogPosting"');
+    expect(html).toContain('"mainEntityOfPage":"' + canonical + '"');
+    expect(html).toContain(
+      'href="/posts/post-quantum-cryptography-engineers/"',
+    );
+    expect(html).toContain('href="#from-superposition-to-entanglement"');
+    expect(html).toContain(
+      'aria-label="Link to section: From superposition to entanglement"',
+    );
+    expect(html).toContain('href="#phase-and-interference"');
+    expect(html).toContain(
+      'aria-label="Link to section: Phase and interference"',
+    );
+    expect(
+      html.match(/class="article-share article-share--(?:compact|full)"/g),
+    ).toHaveLength(2);
+    expect(
+      html.match(
+        /data-copy-url="https:\/\/blog\.jurolc\.com\/posts\/classical-vs-quantum-logic-gates\/"/g,
+      ),
+    ).toHaveLength(2);
+    expect(html).not.toMatch(/vercel\.app|localhost|utm_/i);
+    expect(rss).toContain(canonical);
+    expect(sitemap).toContain(canonical);
   });
 });
