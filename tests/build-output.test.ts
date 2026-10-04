@@ -21,7 +21,10 @@ describe('built article image output', () => {
     }
     expect(html).toContain('src="/favicon.svg"');
     expect(html).toContain('alt="" aria-hidden="true"');
+    expect(html).toContain('Jurol James, Engineering Notes home');
+    expect(html).toContain('Engineering Notes');
     for (const asset of [
+      'dist/jurol-logo.svg',
       'dist/favicon.ico',
       'dist/favicon-32x32.png',
       'dist/apple-touch-icon.png',
@@ -33,6 +36,22 @@ describe('built article image output', () => {
     expect(svg).not.toContain('<image');
     expect(svg).not.toContain('data:image');
     expect(svg).not.toContain('<rect');
+    expect(svg).not.toMatch(/<(?:script|foreignObject|image)\b/i);
+    expect(svg).not.toMatch(/\son[a-z]+\s*=/i);
+    expect(svg).not.toMatch(/(?:href|xlink:href)=["'](?:https?:|\/\/)/i);
+    expect(svg).not.toMatch(
+      /(?:@import|javascript:|url\(\s*(?:https?:|\/\/))/i,
+    );
+    const logo = await readFile('dist/jurol-logo.svg', 'utf8');
+    expect(logo).toContain('viewBox="0 0 337 337"');
+    expect(logo).toContain('Greener Than Your Mind');
+    expect(logo).not.toMatch(/<(?:script|foreignObject|image)\b/i);
+    expect(logo).not.toMatch(/\son[a-z]+\s*=/i);
+    expect(logo).not.toMatch(/(?:href|xlink:href)=["'](?:https?:|\/\/)/i);
+    expect(logo).not.toMatch(
+      /(?:@import|javascript:|url\(\s*(?:https?:|\/\/))/i,
+    );
+    expect(logo).not.toMatch(/<(?:style|text)\b/i);
     const icon = await readFile('dist/favicon.ico');
     expect(icon.readUInt16LE(2)).toBe(1);
     expect(icon.readUInt16LE(4)).toBe(3);
