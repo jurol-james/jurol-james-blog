@@ -6,6 +6,7 @@ const gatesArticlePath =
   'dist/posts/classical-vs-quantum-logic-gates/index.html';
 const qubitArticlePath =
   'dist/posts/qubits-superposition-phase-bloch-sphere/index.html';
+const mlKemArticlePath = 'dist/posts/inside-ml-kem/index.html';
 
 describe('built article image output', () => {
   it('serves the Jurol favicon, touch icon, and decorative header mark', async () => {
@@ -375,5 +376,103 @@ describe('quantum computing fundamentals part 2 output', () => {
     ]) {
       expect((await readFile(file)).byteLength).toBeGreaterThan(0);
     }
+  });
+});
+
+describe('post-quantum cryptography part 2 output', () => {
+  it('renders ML-KEM as part 2 with standard sizes and reusable article features', async () => {
+    const html = await readFile(mlKemArticlePath, 'utf8');
+    const canonical = 'https://blog.jurolc.com/posts/inside-ml-kem/';
+    const title = html.indexOf(
+      '<h1>Inside ML-KEM: How Post-Quantum Key Establishment Works</h1>',
+    );
+    const cover = html.indexOf('<figure class="post-cover">');
+    const deck = html.indexOf('<p class="post-deck">');
+    const metadata = html.indexOf('<div class="article-meta">');
+    const compactShare = html.indexOf('article-share--compact');
+    const toc = html.indexOf('<nav class="toc"');
+    const body = html.indexOf('<div class="prose">');
+    expect(title).toBeGreaterThanOrEqual(0);
+    expect(cover).toBeGreaterThan(title);
+    expect(deck).toBeGreaterThan(cover);
+    expect(metadata).toBeGreaterThan(deck);
+    expect(compactShare).toBeGreaterThan(metadata);
+    expect(compactShare).toBeLessThan(toc);
+    expect(toc).toBeLessThan(body);
+    expect(html).toContain('Post-Quantum Cryptography · Part 2');
+    expect(html).toContain(
+      '<h1>Inside ML-KEM: How Post-Quantum Key Establishment Works</h1>',
+    );
+    expect(html).toContain(`<link rel="canonical" href="${canonical}">`);
+    expect(html).toContain(`<meta property="og:url" content="${canonical}">`);
+    expect(html).toContain('"@type":"BlogPosting"');
+    expect(html).toContain(
+      'href="/posts/post-quantum-cryptography-engineers/"',
+    );
+    expect(html).toContain('href="#what-if-the-ciphertext-was-changed"');
+    expect(html).toContain(
+      'aria-label="Link to section: What if the ciphertext was changed?"',
+    );
+    expect(html).toContain('ML-KEM-512');
+    expect(html).toContain('ML-KEM-768');
+    expect(html).toContain('ML-KEM-1024');
+    expect(html).toContain('1,184 bytes');
+    expect(html).toContain('1,088 bytes');
+    expect(html).toContain('security categories 1, 3, and 5');
+    expect(html).toContain('implicit rejection');
+    expect(html).toContain('FIPS 203');
+    expect(html).toContain('RFC 10024');
+    expect(html).toContain('ML-DSA');
+    expect(html).toContain('alt="ML-KEM key establishment: a sender uses');
+    expect(html).toContain('class="post-cover"');
+    expect(html).toContain('alt="Hybrid key establishment flow showing');
+    expect(html).toContain('class="article-figure"');
+    expect(html).toContain(
+      'the KEM ciphertext is not the encrypted file, API message, or database record.',
+    );
+
+    expect(
+      html.match(/class="article-share article-share--(?:compact|full)"/g),
+    ).toHaveLength(2);
+    expect(html).toContain('https://www.linkedin.com/sharing/share-offsite/');
+    expect(html).toContain('https://www.facebook.com/sharer/sharer.php');
+    expect(html).toContain('https://www.pinterest.com/pin/create/button/');
+    expect(html).toContain(encodeURIComponent(canonical));
+    expect(html).toContain(`data-copy-url="${canonical}"`);
+    expect(html).not.toMatch(
+      /vercel\.app|localhost|utm_|(?:C:\\Users|\/mnt\/c\/Users)/i,
+    );
+
+    const articleImages =
+      html
+        .match(
+          /<figure class="(?:post-cover|article-figure)">[\s\S]*?<\/figure>/g,
+        )
+        ?.join('\n') ?? '';
+    for (const image of articleImages.match(/<img\b[^>]*>/g) ?? []) {
+      expect(image).toMatch(/\bsrc="\/_astro\//);
+      expect(image).toMatch(/\bsrcset="[^"]*320w/);
+      expect(image).toMatch(/\bsrcset="[^"]*390w/);
+      expect(image).toMatch(/\balt="[^"]+"/);
+    }
+  });
+
+  it('includes Part 2 in RSS and sitemap and leaves the other series separate', async () => {
+    const [html, rss, sitemap] = await Promise.all([
+      readFile(mlKemArticlePath, 'utf8'),
+      readFile('dist/rss.xml', 'utf8'),
+      readFile('dist/sitemap-0.xml', 'utf8'),
+    ]);
+    const url = 'https://blog.jurolc.com/posts/inside-ml-kem';
+    expect(rss).toContain(url);
+    expect(sitemap).toContain(`${url}/`);
+    expect(html).toContain('Post-Quantum Cryptography · Part 2');
+    expect(html).not.toContain('Quantum Computing Fundamentals · Part 2');
+    const quantumSeries = await readFile(
+      'dist/posts/qubits-superposition-phase-bloch-sphere/index.html',
+      'utf8',
+    );
+    expect(quantumSeries).toContain('Quantum Computing Fundamentals · Part 2');
+    expect(quantumSeries).not.toContain('Post-Quantum Cryptography · Part 2');
   });
 });
