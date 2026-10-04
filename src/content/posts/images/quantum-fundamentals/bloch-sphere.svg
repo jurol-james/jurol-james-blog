@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="760" viewBox="0 0 1000 760" role="img" aria-labelledby="title desc">
+  <title id="title">Single-qubit Bloch sphere</title>
+  <desc id="desc">Bloch sphere with zero and one at the Z poles, plus and minus on the X axis, plus i and minus i on the Y axis, and a general pure state located by theta and phi.</desc>
+  <rect width="1000" height="760" rx="24" fill="#fbfaf7"/>
+  <text x="60" y="68" fill="#17301c" font-family="Arial, sans-serif" font-size="27" font-weight="700">A pure qubit state on the Bloch sphere</text>
+  <!-- Sphere projection: horizontal X axis, diagonal Y axis, vertical Z axis. -->
+  <circle cx="480" cy="390" r="225" fill="#f3f6f1" stroke="#8da18a" stroke-width="3"/>
+  <!-- equator and meridian guides -->
+  <ellipse cx="480" cy="390" rx="225" ry="78" fill="none" stroke="#b5c1b2" stroke-width="2"/>
+  <ellipse cx="480" cy="390" rx="82" ry="225" fill="none" stroke="#d0d8cd" stroke-width="2" transform="rotate(28 480 390)"/>
+  <!-- axes -->
+  <path d="M480 140V640" stroke="#627963" stroke-width="2"/>
+  <path d="M230 390H730" stroke="#627963" stroke-width="2"/>
+  <path d="M334 536 626 244" stroke="#627963" stroke-width="2" stroke-dasharray="8 7"/>
+  <text x="480" y="118" text-anchor="middle" fill="#17301c" font-family="Arial, sans-serif" font-size="21" font-weight="700">+Z · |0⟩</text>
+  <text x="480" y="680" text-anchor="middle" fill="#17301c" font-family="Arial, sans-serif" font-size="21" font-weight="700">−Z · |1⟩</text>
+  <text x="205" y="398" text-anchor="end" fill="#17301c" font-family="Arial, sans-serif" font-size="20" font-weight="700">−X · |−⟩</text>
+  <text x="752" y="398" fill="#17301c" font-family="Arial, sans-serif" font-size="20" font-weight="700">+X · |+⟩</text>
+  <text x="310" y="562" text-anchor="end" fill="#536257" font-family="Arial, sans-serif" font-size="18">−Y · |−i⟩</text>
+  <text x="646" y="211" fill="#536257" font-family="Arial, sans-serif" font-size="18">+Y · |+i⟩</text>
+  <!-- generic state and theta -->
+  <path d="M480 390 600 239" stroke="#275c35" stroke-width="5" stroke-linecap="round"/>
+  <circle cx="600" cy="239" r="9" fill="#275c35"/>
+  <text x="573" y="218" fill="#17301c" font-family="Georgia, serif" font-size="23">|ψ⟩</text>
+  <path d="M480 320 A70 70 0 0 1 524 336" fill="none" stroke="#a35c20" stroke-width="3"/>
+  <text x="530" y="320" fill="#7b461c" font-family="Georgia, serif" font-size="24">θ</text>
+  <!-- phi shown as equatorial azimuth cue -->
+  <path d="M480 390 540 390 A60 23 0 0 0 524 373" fill="none" stroke="#526d99" stroke-width="3"/>
+  <text x="535" y="371" fill="#3f587c" font-family="Georgia, serif" font-size="23">φ</text>
+  <text x="60" y="720" fill="#536257" font-family="Arial, sans-serif" font-size="17">θ is measured from +Z; φ is the azimuth around Z, from +X toward +Y.</text>
+</svg>
