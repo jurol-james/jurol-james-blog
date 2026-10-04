@@ -4,6 +4,8 @@ import { describe, expect, it } from 'vitest';
 const articlePath = 'dist/posts/post-quantum-cryptography-engineers/index.html';
 const gatesArticlePath =
   'dist/posts/classical-vs-quantum-logic-gates/index.html';
+const qubitArticlePath =
+  'dist/posts/qubits-superposition-phase-bloch-sphere/index.html';
 
 describe('built article image output', () => {
   it('serves the Jurol favicon, touch icon, and decorative header mark', async () => {
@@ -309,5 +311,69 @@ describe('classical and quantum logic gates article output', () => {
     expect(html).not.toMatch(/vercel\.app|localhost|utm_/i);
     expect(rss).toContain(canonical);
     expect(sitemap).toContain(canonical);
+  });
+});
+
+describe('quantum computing fundamentals part 2 output', () => {
+  it('renders the series article, diagrams, canonical metadata, TOC, and sharing', async () => {
+    const html = await readFile(qubitArticlePath, 'utf8');
+    const canonical =
+      'https://blog.jurolc.com/posts/qubits-superposition-phase-bloch-sphere/';
+    expect(html).toContain('Quantum Computing Fundamentals · Part 2');
+    expect(html).toContain(
+      '<h1>Qubits, Superposition, Phase, and the Bloch Sphere: A Software Engineer’s Guide</h1>',
+    );
+    expect(html).toContain(`<link rel="canonical" href="${canonical}">`);
+    expect(html).toContain('og:url" content="' + canonical);
+    expect(html).toContain('class="toc"');
+    expect(html).toContain('href="#amplitudes-are-not-probabilities"');
+    expect(html).toContain('href="/posts/classical-vs-quantum-logic-gates/"');
+    expect(html).toContain('alt="A classical bit with a definite 0 or 1');
+    expect(html).toContain('class="post-cover"');
+    expect(html).toContain('Bloch sphere with |0⟩ and |1⟩');
+    expect(html).toContain('class="article-figure"');
+    expect(html).toContain('θ sets the latitude');
+    expect(html).toContain('aria-label="Share this article"');
+    expect(
+      html.match(/class="article-share article-share--(?:compact|full)"/g),
+    ).toHaveLength(2);
+    expect(html).toContain('https://www.linkedin.com/sharing/share-offsite/');
+    expect(html).toContain('https://www.facebook.com/sharer/sharer.php');
+    expect(html).toContain('https://www.pinterest.com/pin/create/button/');
+    expect(html).toContain(encodeURIComponent(canonical));
+    expect(html).not.toMatch(/(?:C:\\Users|\/mnt\/c\/Users)/i);
+    expect(html).not.toContain('vercel.app');
+    expect(html).not.toContain('utm_');
+    expect(html).toContain(
+      'data-copy-url="https://blog.jurolc.com/posts/qubits-superposition-phase-bloch-sphere/"',
+    );
+
+    const imageSources = [...html.matchAll(/<img[^>]+src="([^"]+)"/g)].map(
+      ([, source]) => source,
+    );
+    expect(
+      imageSources.filter((source) => source.includes('bloch-sphere')),
+    ).toHaveLength(1);
+    expect(
+      imageSources.filter((source) => source.includes('inside-a-qubit')),
+    ).toHaveLength(1);
+    expect(imageSources.every((source) => source.startsWith('/'))).toBe(true);
+  });
+
+  it('includes the article in RSS and sitemap and builds its image assets', async () => {
+    const [rss, sitemap] = await Promise.all([
+      readFile('dist/rss.xml', 'utf8'),
+      readFile('dist/sitemap-0.xml', 'utf8'),
+    ]);
+    const url =
+      'https://blog.jurolc.com/posts/qubits-superposition-phase-bloch-sphere';
+    expect(rss).toContain(url);
+    expect(sitemap).toContain(`${url}/`);
+    for (const file of [
+      'src/content/posts/images/inside-a-qubit.webp',
+      'src/content/posts/images/bloch-sphere.webp',
+    ]) {
+      expect((await readFile(file)).byteLength).toBeGreaterThan(0);
+    }
   });
 });

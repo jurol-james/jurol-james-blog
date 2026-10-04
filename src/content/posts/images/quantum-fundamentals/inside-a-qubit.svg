@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675" role="img" aria-labelledby="title desc">
+  <title id="title">Inside a qubit</title>
+  <desc id="desc">A definite classical bit is contrasted with a qubit represented by two amplitudes and a point on the Bloch sphere.</desc>
+  <rect width="1200" height="675" rx="28" fill="#f5f4ef"/>
+  <text x="72" y="80" fill="#17301c" font-family="Arial, sans-serif" font-size="22" font-weight="700" letter-spacing="3">ENGINEERING NOTES · QUANTUM COMPUTING FUNDAMENTALS</text>
+  <text x="72" y="145" fill="#17301c" font-family="Arial, sans-serif" font-size="44" font-weight="700">Inside a qubit</text>
+  <rect x="72" y="205" width="300" height="345" rx="20" fill="#fff" stroke="#c9d1c7" stroke-width="2"/>
+  <text x="102" y="250" fill="#536257" font-family="Arial, sans-serif" font-size="20" font-weight="700" letter-spacing="2">CLASSICAL BIT</text>
+  <rect x="112" y="294" width="220" height="170" rx="16" fill="#edf2eb"/>
+  <text x="222" y="376" text-anchor="middle" fill="#17301c" font-family="Arial, sans-serif" font-size="54" font-weight="700">0 OR 1</text>
+  <text x="222" y="505" text-anchor="middle" fill="#536257" font-family="Arial, sans-serif" font-size="20">one definite logical value</text>
+  <path d="M400 378h90" stroke="#476c4d" stroke-width="5"/>
+  <path d="m478 362 18 16-18 16" fill="none" stroke="#476c4d" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="520" y="205" width="608" height="345" rx="20" fill="#fff" stroke="#c9d1c7" stroke-width="2"/>
+  <text x="552" y="250" fill="#536257" font-family="Arial, sans-serif" font-size="20" font-weight="700" letter-spacing="2">PURE QUBIT STATE</text>
+  <text x="560" y="340" fill="#17301c" font-family="Georgia, serif" font-size="38">|ψ⟩ = α|0⟩ + β|1⟩</text>
+  <text x="560" y="395" fill="#536257" font-family="Arial, sans-serif" font-size="21">|amplitude| → probability</text>
+  <text x="560" y="432" fill="#536257" font-family="Arial, sans-serif" font-size="21">relative phase → interference</text>
+  <circle cx="1000" cy="390" r="83" fill="#f6f8f4" stroke="#527257" stroke-width="3"/>
+  <ellipse cx="1000" cy="390" rx="83" ry="29" fill="none" stroke="#9aab98" stroke-width="2"/>
+  <path d="M1000 307v166M917 390h166" stroke="#9aab98" stroke-width="2"/>
+  <path d="M1000 390 1054 337" stroke="#17301c" stroke-width="5" stroke-linecap="round"/>
+  <circle cx="1054" cy="337" r="8" fill="#17301c"/>
+  <text x="1066" y="329" fill="#17301c" font-family="Georgia, serif" font-size="22">|ψ⟩</text>
+  <text x="1000" y="295" text-anchor="middle" fill="#536257" font-family="Arial, sans-serif" font-size="17">+Z · |0⟩</text>
+  <text x="1000" y="505" text-anchor="middle" fill="#536257" font-family="Arial, sans-serif" font-size="17">−Z · |1⟩</text>
+  <text x="72" y="615" fill="#536257" font-family="Arial, sans-serif" font-size="19">A qubit state carries amplitudes and relative phase—not two independently readable bit values.</text>
+</svg>
