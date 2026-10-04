@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="600" viewBox="0 0 1100 600" role="img" aria-labelledby="title desc">
+  <title id="title">Hybrid classical and post-quantum key establishment</title>
+  <desc id="desc">An ephemeral ECDH exchange and ML-KEM each produce separate shared secret material. A key combiner specified by the protocol combines them into session key material for authenticated encryption.</desc>
+  <rect width="1100" height="600" rx="26" fill="#f5f4ef"/>
+  <text x="58" y="68" fill="#17301c" font-family="Arial,sans-serif" font-size="20" font-weight="700" letter-spacing="2">A PROTOCOL-DESIGNED HYBRID</text>
+  <text x="58" y="120" fill="#17301c" font-family="Arial,sans-serif" font-size="32" font-weight="700">A protocol-defined hybrid key schedule</text>
+  <rect x="58" y="172" width="360" height="130" rx="18" fill="#fff" stroke="#c9d1c7" stroke-width="2"/>
+  <text x="238" y="212" text-anchor="middle" fill="#17301c" font-family="Arial,sans-serif" font-size="23" font-weight="700">Ephemeral ECDH</text>
+  <text x="238" y="250" text-anchor="middle" fill="#536257" font-family="Arial,sans-serif" font-size="19">shared secret Kₑ</text>
+  <text x="238" y="278" text-anchor="middle" fill="#536257" font-family="Arial,sans-serif" font-size="15">classical component</text>
+  <rect x="58" y="332" width="360" height="130" rx="18" fill="#fff" stroke="#c9d1c7" stroke-width="2"/>
+  <text x="238" y="372" text-anchor="middle" fill="#17301c" font-family="Arial,sans-serif" font-size="23" font-weight="700">ML-KEM</text>
+  <text x="238" y="410" text-anchor="middle" fill="#536257" font-family="Arial,sans-serif" font-size="19">shared secret Kₚq</text>
+  <text x="238" y="438" text-anchor="middle" fill="#536257" font-family="Arial,sans-serif" font-size="15">post-quantum component</text>
+  <path d="M438 237h70v90h42M438 397h70v-70h42" fill="none" stroke="#527257" stroke-width="4"/>
+  <path d="m540 317 14 10-14 10" fill="none" stroke="#527257" stroke-width="4"/>
+  <rect x="572" y="245" width="260" height="164" rx="18" fill="#eaf0e8" stroke="#aebdaa" stroke-width="2"/>
+  <text x="702" y="288" text-anchor="middle" fill="#17301c" font-family="Arial,sans-serif" font-size="21" font-weight="700">Protocol-defined</text>
+  <text x="702" y="318" text-anchor="middle" fill="#17301c" font-family="Arial,sans-serif" font-size="21" font-weight="700">key combiner /</text>
+  <text x="702" y="348" text-anchor="middle" fill="#17301c" font-family="Arial,sans-serif" font-size="21" font-weight="700">key schedule</text>
+  <text x="702" y="383" text-anchor="middle" fill="#536257" font-family="Arial,sans-serif" font-size="15">binds inputs and context</text>
+  <path d="M850 327h74" stroke="#527257" stroke-width="4"/><path d="m912 317 14 10-14 10" fill="none" stroke="#527257" stroke-width="4"/>
+  <rect x="944" y="263" width="110" height="128" rx="18" fill="#fff" stroke="#c9d1c7" stroke-width="2"/>
+  <text x="999" y="308" text-anchor="middle" fill="#17301c" font-family="Arial,sans-serif" font-size="19" font-weight="700">AEAD</text>
+  <text x="999" y="342" text-anchor="middle" fill="#536257" font-family="Arial,sans-serif" font-size="16">traffic</text>
+  <text x="999" y="367" text-anchor="middle" fill="#536257" font-family="Arial,sans-serif" font-size="16">keys</text>
+  <rect x="58" y="502" width="996" height="56" rx="12" fill="#f8f0e6"/>
+  <text x="556" y="537" text-anchor="middle" fill="#6d4d2d" font-family="Arial,sans-serif" font-size="18">Never invent a combiner by concatenating secrets; follow the protocol specification.</text>
+</svg>
