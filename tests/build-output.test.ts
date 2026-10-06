@@ -1,4 +1,5 @@
 import { readFile } from 'node:fs/promises';
+import { createHash } from 'node:crypto';
 import { describe, expect, it } from 'vitest';
 
 const articlePath = 'dist/posts/post-quantum-cryptography-engineers/index.html';
@@ -7,6 +8,43 @@ const gatesArticlePath =
 const qubitArticlePath =
   'dist/posts/qubits-superposition-phase-bloch-sphere/index.html';
 const mlKemArticlePath = 'dist/posts/inside-ml-kem/index.html';
+
+describe('Vercel Web Analytics output', () => {
+  it('allows the adapter bootstrap with its exact CSP hash on built pages', async () => {
+    const [home, article, configText] = await Promise.all([
+      readFile('dist/index.html', 'utf8'),
+      readFile(articlePath, 'utf8'),
+      readFile('vercel.json', 'utf8'),
+    ]);
+    const config = JSON.parse(configText) as {
+      headers: { headers: { key: string; value: string }[] }[];
+    };
+    const csp = config.headers[0].headers.find(
+      ({ key }) => key === 'Content-Security-Policy',
+    )?.value;
+    const analyticsBootstrap = [
+      ...home.matchAll(/<script>([\s\S]*?)<\/script>/g),
+    ]
+      .map((match) => match[1])
+      .find(
+        (script) =>
+          script.includes('window.va') &&
+          script.includes('/_vercel/insights/script.js'),
+      );
+
+    expect(analyticsBootstrap).toBeDefined();
+    expect(article).toContain('/_vercel/insights/script.js');
+    expect(home).toContain('/_vercel/insights/script.js');
+    const hash = createHash('sha256')
+      .update(analyticsBootstrap ?? '')
+      .digest('base64');
+    expect(csp).toContain(`'sha256-${hash}'`);
+    expect(csp).toContain("script-src 'self'");
+    expect(csp).not.toContain("'unsafe-inline'");
+    expect(csp).not.toContain('unsafe-eval');
+    expect(csp).not.toMatch(/(?:^|\s|;|:)\*(?:\s|;|$)/);
+  });
+});
 
 describe('built article image output', () => {
   it('serves the Jurol favicon, touch icon, and decorative header mark', async () => {
