@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="940" viewBox="0 0 1200 940" role="img" aria-labelledby="title desc">
+  <title id="title">From hard-coded cryptography to crypto-agile architecture</title>
+  <desc id="desc">A side-by-side architecture comparison. The left shows application layers tied directly to RSA-specific assumptions. The right shows business intent passing through a semantic crypto API, approved policy and suite selection, and a JCA provider implementation.</desc>
+  <rect width="1200" height="940" rx="28" fill="#f5f4ef"/>
+  <text x="58" y="64" fill="#17301c" font-family="Arial,sans-serif" font-size="22" font-weight="700" letter-spacing="1.5">ENGINEERING NOTES · CRYPTO AGILITY</text>
+  <text x="58" y="124" fill="#17301c" font-family="Arial,sans-serif" font-size="43" font-weight="700">Make cryptography easier to change</text>
+
+  <rect x="48" y="162" width="532" height="720" rx="22" fill="#fff" stroke="#d7c9b8" stroke-width="3"/>
+  <text x="84" y="218" fill="#795632" font-family="Arial,sans-serif" font-size="29" font-weight="700" letter-spacing="1.5">BEFORE · SCATTERED</text>
+  <rect x="116" y="260" width="396" height="94" rx="14" fill="#f8f0e6" stroke="#dfc7a8" stroke-width="2"/>
+  <text x="314" y="318" text-anchor="middle" fill="#49341f" font-family="Arial,sans-serif" font-size="33" font-weight="700">Application code</text>
+  <path d="M314 354v70" fill="none" stroke="#a77b4a" stroke-width="5"/><path d="m302 411 12 17 12-17" fill="none" stroke="#a77b4a" stroke-width="5"/>
+  <rect x="92" y="442" width="444" height="180" rx="16" fill="#fbf8f4" stroke="#dfc7a8" stroke-width="2"/>
+  <text x="314" y="500" text-anchor="middle" fill="#49341f" font-family="Arial,sans-serif" font-size="31" font-weight="700">RSA assumptions in</text>
+  <text x="314" y="545" text-anchor="middle" fill="#795632" font-family="Arial,sans-serif" font-size="27">services · storage · APIs · tests</text>
+  <text x="314" y="585" text-anchor="middle" fill="#795632" font-family="Arial,sans-serif" font-size="25">keys · sizes · formats</text>
+  <text x="314" y="696" text-anchor="middle" fill="#6b6258" font-family="Arial,sans-serif" font-size="25">Changing one primitive touches many</text>
+  <text x="314" y="734" text-anchor="middle" fill="#6b6258" font-family="Arial,sans-serif" font-size="25">contracts and application components.</text>
+
+  <rect x="620" y="162" width="532" height="720" rx="22" fill="#eaf0e8" stroke="#b8c7b5" stroke-width="3"/>
+  <text x="656" y="218" fill="#17301c" font-family="Arial,sans-serif" font-size="29" font-weight="700" letter-spacing="1.5">AFTER · CONTROLLED</text>
+  <rect x="696" y="250" width="380" height="82" rx="13" fill="#fff" stroke="#b8c7b5" stroke-width="2"/>
+  <text x="886" y="302" text-anchor="middle" fill="#17301c" font-family="Arial,sans-serif" font-size="29" font-weight="700">Application intent</text>
+  <path d="M886 332v42" fill="none" stroke="#527257" stroke-width="5"/><path d="m874 361 12 17 12-17" fill="none" stroke="#527257" stroke-width="5"/>
+  <rect x="696" y="388" width="380" height="82" rx="13" fill="#fff" stroke="#b8c7b5" stroke-width="2"/>
+  <text x="886" y="440" text-anchor="middle" fill="#17301c" font-family="Arial,sans-serif" font-size="29" font-weight="700">Semantic crypto API</text>
+  <path d="M886 470v42" fill="none" stroke="#527257" stroke-width="5"/><path d="m874 499 12 17 12-17" fill="none" stroke="#527257" stroke-width="5"/>
+  <rect x="680" y="526" width="412" height="112" rx="14" fill="#dce8d9" stroke="#aabda6" stroke-width="2"/>
+  <text x="886" y="572" text-anchor="middle" fill="#17301c" font-family="Arial,sans-serif" font-size="27" font-weight="700">Policy + approved suite</text>
+  <text x="886" y="610" text-anchor="middle" fill="#536257" font-family="Arial,sans-serif" font-size="23">allowlisted · versioned · observable</text>
+  <path d="M886 638v42" fill="none" stroke="#527257" stroke-width="5"/><path d="m874 667 12 17 12-17" fill="none" stroke="#527257" stroke-width="5"/>
+  <rect x="696" y="694" width="380" height="82" rx="13" fill="#fff" stroke="#b8c7b5" stroke-width="2"/>
+  <text x="886" y="746" text-anchor="middle" fill="#17301c" font-family="Arial,sans-serif" font-size="29" font-weight="700">JCA provider</text>
+  <text x="886" y="824" text-anchor="middle" fill="#536257" font-family="Arial,sans-serif" font-size="24">Vetted implementation boundary</text>
+</svg>

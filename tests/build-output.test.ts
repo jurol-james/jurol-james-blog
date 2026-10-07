@@ -8,6 +8,8 @@ const gatesArticlePath =
 const qubitArticlePath =
   'dist/posts/qubits-superposition-phase-bloch-sphere/index.html';
 const mlKemArticlePath = 'dist/posts/inside-ml-kem/index.html';
+const cryptoAgilityArticlePath =
+  'dist/posts/crypto-agility-java-post-quantum-migration/index.html';
 
 describe('Vercel Web Analytics output', () => {
   it('allows the adapter bootstrap with its exact CSP hash on built pages', async () => {
@@ -531,5 +533,128 @@ describe('post-quantum cryptography part 2 output', () => {
     );
     expect(quantumSeries).toContain('Quantum Computing Fundamentals · Part 2');
     expect(quantumSeries).not.toContain('Post-Quantum Cryptography · Part 2');
+  });
+});
+
+describe('post-quantum cryptography part 3 output', () => {
+  it('renders the Java crypto-agility article with reusable article features', async () => {
+    const html = await readFile(cryptoAgilityArticlePath, 'utf8');
+    const canonical =
+      'https://blog.jurolc.com/posts/crypto-agility-java-post-quantum-migration/';
+    const title = html.indexOf(
+      '<h1>Crypto Agility: Preparing Java Applications for Post-Quantum Migration</h1>',
+    );
+    const cover = html.indexOf('<figure class="post-cover">');
+    const deck = html.indexOf('<p class="post-deck">');
+    const metadata = html.indexOf('<div class="article-meta">', deck);
+    const compactShare = html.indexOf('article-share--compact');
+    const toc = html.indexOf('<nav class="toc"');
+    const body = html.indexOf('<div class="prose">');
+
+    expect(title).toBeGreaterThanOrEqual(0);
+    expect(cover).toBeGreaterThan(title);
+    expect(deck).toBeGreaterThan(cover);
+    expect(metadata).toBeGreaterThan(deck);
+    expect(compactShare).toBeGreaterThan(metadata);
+    expect(compactShare).toBeLessThan(toc);
+    expect(toc).toBeLessThan(body);
+    expect(html).toContain('Post-Quantum Cryptography · Part 3');
+    expect(html).toContain(`<link rel="canonical" href="${canonical}">`);
+    expect(html).toContain(`<meta property="og:url" content="${canonical}">`);
+    expect(html).toContain('"@type":"BlogPosting"');
+    expect(html).toContain(
+      'og:image" content="https://blog.jurolc.com/_astro/',
+    );
+    expect(html).toContain(
+      'twitter:image" content="https://blog.jurolc.com/_astro/',
+    );
+    expect(html).toContain('class="toc"');
+    expect(html).toContain('href="#what-crypto-agility-actually-means"');
+    expect(html).toContain(
+      'aria-label="Link to section: What crypto agility actually means"',
+    );
+    expect(html).toContain(
+      'href="#javas-cryptography-architecture-and-kem-support"',
+    );
+    expect(html).toContain(
+      'href="/posts/post-quantum-cryptography-engineers/"',
+    );
+    expect(html).toContain('href="/posts/inside-ml-kem/"');
+    expect(html).toContain('NIST CSWP 39upd1');
+    expect(html).toContain('Java SE 26');
+    expect(html).toContain('RFC 10024');
+    expect(html).toContain('javax.crypto.KEM');
+    expect(html).toContain('data-copy-url="' + canonical + '"');
+
+    expect(
+      html.match(/class="article-share article-share--(?:compact|full)"/g),
+    ).toHaveLength(2);
+    expect(html).toContain('https://www.linkedin.com/sharing/share-offsite/');
+    expect(html).toContain('https://www.facebook.com/sharer/sharer.php');
+    expect(html).toContain('https://www.pinterest.com/pin/create/button/');
+    expect(html).toContain(encodeURIComponent(canonical));
+    expect(html).not.toMatch(
+      /vercel\.app|localhost|utm_|(?:C:\\Users|\/mnt\/c\/Users)/i,
+    );
+
+    const figures =
+      html
+        .match(
+          /<figure class="(?:post-cover|article-figure)">[\s\S]*?<\/figure>/g,
+        )
+        ?.join('\n') ?? '';
+    const images = figures.match(/<img\b[^>]*>/g) ?? [];
+    expect(images).toHaveLength(2);
+    for (const image of images) {
+      expect(image).toMatch(/\bsrc="\/_astro\//);
+      expect(image).toMatch(/\bsrcset="[^"]*320w/);
+      expect(image).toMatch(/\bsrcset="[^"]*390w/);
+      expect(image).toMatch(/\balt="[^"]+"/);
+      expect(image).toMatch(/width="\d+" height="\d+"/);
+    }
+    expect(figures).toContain('Crypto agility moves cryptographic choices');
+    expect(figures).toContain('Nine-step post-quantum migration planning flow');
+    expect(figures).toContain(
+      'A practical sequence from discovery to retirement.',
+    );
+  });
+
+  it('includes Part 3 in RSS and sitemap without mixing the other series', async () => {
+    const [html, rss, sitemap, part1, part2, quantumPart2] = await Promise.all([
+      readFile(cryptoAgilityArticlePath, 'utf8'),
+      readFile('dist/rss.xml', 'utf8'),
+      readFile('dist/sitemap-0.xml', 'utf8'),
+      readFile(
+        'dist/posts/post-quantum-cryptography-engineers/index.html',
+        'utf8',
+      ),
+      readFile('dist/posts/inside-ml-kem/index.html', 'utf8'),
+      readFile(
+        'dist/posts/qubits-superposition-phase-bloch-sphere/index.html',
+        'utf8',
+      ),
+    ]);
+    const url =
+      'https://blog.jurolc.com/posts/crypto-agility-java-post-quantum-migration';
+    expect(rss).toContain(url);
+    expect(sitemap).toContain(`${url}/`);
+    expect(html).toContain('Post-Quantum Cryptography · Part 3');
+    expect(part1).toContain('Post-Quantum Cryptography · Part 1');
+    expect(part2).toContain('Post-Quantum Cryptography · Part 2');
+    expect(quantumPart2).toContain('Quantum Computing Fundamentals · Part 2');
+    expect(html).not.toContain('Quantum Computing Fundamentals · Part 3');
+    expect(html).not.toMatch(/(?:C:\\Users|\/mnt\/c\/Users)/i);
+    for (const file of [
+      'src/content/posts/images/pqc-crypto-agility-architecture.svg',
+      'src/content/posts/images/pqc-crypto-agility-architecture.webp',
+      'src/content/posts/images/pqc-migration-playbook.svg',
+      'src/content/posts/images/pqc-migration-playbook.webp',
+    ]) {
+      expect((await readFile(file)).byteLength).toBeGreaterThan(0);
+    }
+    const imageTags = html.match(/<img\b[^>]*>/g) ?? [];
+    expect(imageTags.filter((image) => /\bsrc="https?:/i.test(image))).toEqual(
+      [],
+    );
   });
 });
