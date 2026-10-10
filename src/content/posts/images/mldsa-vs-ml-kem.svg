@@ -1,0 +1,286 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="1600"
+  height="1000"
+  viewBox="0 0 1600 1000"
+  role="img"
+  aria-labelledby="title desc"
+>
+  <title id="title">
+    ML-KEM and ML-DSA serve different cryptographic purposes
+  </title>
+  <desc id="desc">
+    Two panels compare ML-KEM, which uses an encapsulation key to establish
+    shared keying material, with ML-DSA, which uses a private signing key to
+    create a signature and a public verification key to check it.
+  </desc>
+  <rect width="1600" height="1000" fill="#f5f4ef" />
+  <text
+    x="80"
+    y="92"
+    fill="#17301c"
+    font-family="Arial,sans-serif"
+    font-size="26"
+    font-weight="700"
+    letter-spacing="2"
+  >
+    ENGINEERING NOTES · POST-QUANTUM CRYPTOGRAPHY
+  </text>
+  <text
+    x="80"
+    y="165"
+    fill="#17301c"
+    font-family="Arial,sans-serif"
+    font-size="54"
+    font-weight="700"
+  >
+    Two standards, different jobs
+  </text>
+  <rect
+    x="70"
+    y="215"
+    width="710"
+    height="680"
+    rx="28"
+    fill="#eaf0e8"
+    stroke="#b8c7b5"
+    stroke-width="4"
+  />
+  <rect
+    x="820"
+    y="215"
+    width="710"
+    height="680"
+    rx="28"
+    fill="#f3e9dc"
+    stroke="#d9c2a8"
+    stroke-width="4"
+  />
+  <text
+    x="130"
+    y="295"
+    fill="#17301c"
+    font-family="Arial,sans-serif"
+    font-size="32"
+    font-weight="700"
+    letter-spacing="2"
+  >
+    KEY ESTABLISHMENT
+  </text>
+  <text
+    x="130"
+    y="365"
+    fill="#17301c"
+    font-family="Arial,sans-serif"
+    font-size="52"
+    font-weight="700"
+  >
+    ML-KEM
+  </text>
+  <text
+    x="130"
+    y="408"
+    fill="#465b49"
+    font-family="Arial,sans-serif"
+    font-size="26"
+  >
+    Encapsulation produces a KEM ciphertext
+  </text>
+  <text
+    x="130"
+    y="444"
+    fill="#465b49"
+    font-family="Arial,sans-serif"
+    font-size="26"
+  >
+    and matching shared keying material.
+  </text>
+  <rect
+    x="135"
+    y="495"
+    width="570"
+    height="110"
+    rx="18"
+    fill="#fff"
+    stroke="#b8c7b5"
+    stroke-width="3"
+  />
+  <text
+    x="420"
+    y="540"
+    text-anchor="middle"
+    fill="#17301c"
+    font-family="Arial,sans-serif"
+    font-size="29"
+    font-weight="700"
+  >
+    Recipient key pair
+  </text>
+  <text
+    x="420"
+    y="578"
+    text-anchor="middle"
+    fill="#536257"
+    font-family="Arial,sans-serif"
+    font-size="24"
+  >
+    encapsulation key + decapsulation key
+  </text>
+  <path d="M420 608v60" stroke="#527257" stroke-width="6" />
+  <path
+    d="m405 650 15 22 15-22"
+    fill="none"
+    stroke="#527257"
+    stroke-width="6"
+  />
+  <rect
+    x="135"
+    y="690"
+    width="570"
+    height="135"
+    rx="18"
+    fill="#fff"
+    stroke="#b8c7b5"
+    stroke-width="3"
+  />
+  <text
+    x="420"
+    y="742"
+    text-anchor="middle"
+    fill="#17301c"
+    font-family="Arial,sans-serif"
+    font-size="30"
+    font-weight="700"
+  >
+    Encapsulate / decapsulate
+  </text>
+  <text
+    x="420"
+    y="778"
+    text-anchor="middle"
+    fill="#536257"
+    font-family="Arial,sans-serif"
+    font-size="26"
+  >
+    ciphertext sent; secret stays at each side
+  </text>
+  <text
+    x="880"
+    y="295"
+    fill="#634b31"
+    font-family="Arial,sans-serif"
+    font-size="32"
+    font-weight="700"
+    letter-spacing="2"
+  >
+    DIGITAL SIGNATURE
+  </text>
+  <text
+    x="880"
+    y="365"
+    fill="#49341f"
+    font-family="Arial,sans-serif"
+    font-size="52"
+    font-weight="700"
+  >
+    ML-DSA
+  </text>
+  <text
+    x="880"
+    y="408"
+    fill="#6d5942"
+    font-family="Arial,sans-serif"
+    font-size="26"
+  >
+    Signing creates a signature; verification
+  </text>
+  <text
+    x="880"
+    y="444"
+    fill="#6d5942"
+    font-family="Arial,sans-serif"
+    font-size="26"
+  >
+    checks the message against a public key.
+  </text>
+  <rect
+    x="885"
+    y="495"
+    width="570"
+    height="110"
+    rx="18"
+    fill="#fff"
+    stroke="#d9c2a8"
+    stroke-width="3"
+  />
+  <text
+    x="1170"
+    y="540"
+    text-anchor="middle"
+    fill="#49341f"
+    font-family="Arial,sans-serif"
+    font-size="29"
+    font-weight="700"
+  >
+    Private signing key + message
+  </text>
+  <text
+    x="1170"
+    y="578"
+    text-anchor="middle"
+    fill="#6d5942"
+    font-family="Arial,sans-serif"
+    font-size="24"
+  >
+    SIGN → signature
+  </text>
+  <path d="M1170 608v60" stroke="#a77b4a" stroke-width="6" />
+  <path
+    d="m1155 650 15 22 15-22"
+    fill="none"
+    stroke="#a77b4a"
+    stroke-width="6"
+  />
+  <rect
+    x="885"
+    y="690"
+    width="570"
+    height="135"
+    rx="18"
+    fill="#fff"
+    stroke="#d9c2a8"
+    stroke-width="3"
+  />
+  <text
+    x="1170"
+    y="742"
+    text-anchor="middle"
+    fill="#49341f"
+    font-family="Arial,sans-serif"
+    font-size="27"
+    font-weight="700"
+  >
+    Public key + message + signature
+  </text>
+  <text
+    x="1170"
+    y="788"
+    text-anchor="middle"
+    fill="#6d5942"
+    font-family="Arial,sans-serif"
+    font-size="27"
+  >
+    VERIFY → valid / invalid
+  </text>
+  <text
+    x="800"
+    y="956"
+    text-anchor="middle"
+    fill="#17301c"
+    font-family="Arial,sans-serif"
+    font-size="28"
+    font-weight="700"
+  >
+    KEM output is keying material. A signature is not encryption.
+  </text>
+</svg>

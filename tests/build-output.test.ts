@@ -10,6 +10,8 @@ const qubitArticlePath =
 const mlKemArticlePath = 'dist/posts/inside-ml-kem/index.html';
 const cryptoAgilityArticlePath =
   'dist/posts/crypto-agility-java-post-quantum-migration/index.html';
+const mldsaArticlePath =
+  'dist/posts/mldsa-post-quantum-digital-signatures/index.html';
 
 describe('Vercel Web Analytics output', () => {
   it('allows the adapter bootstrap with its exact CSP hash on built pages', async () => {
@@ -284,6 +286,91 @@ describe('built article image output', () => {
     expect(html).not.toMatch(
       /<script[^>]+src="https:\/\/(?:www\.)?(?:linkedin|facebook|pinterest)\.com/i,
     );
+  });
+});
+
+describe('built ML-DSA article output', () => {
+  it('renders Part 4 with canonical metadata, series links, and reusable features', async () => {
+    const html = await readFile(mldsaArticlePath, 'utf8');
+    const canonical =
+      'https://blog.jurolc.com/posts/mldsa-post-quantum-digital-signatures/';
+
+    expect(html).toContain(
+      '<h1>ML-DSA and Post-Quantum Digital Signatures: A Software Engineer&#39;s Guide</h1>',
+    );
+    expect(html).toContain('Post-Quantum Cryptography · Part 4');
+    expect(html).toContain(`<link rel="canonical" href="${canonical}">`);
+    expect(html).toContain(`<meta property="og:url" content="${canonical}">`);
+    expect(html).toContain('"@type":"BlogPosting"');
+    expect(html).toContain('FIPS 204');
+    expect(html).toContain('ML-DSA-44');
+    expect(html).toContain('ML-DSA-65');
+    expect(html).toContain('ML-DSA-87');
+    expect(html).toContain('Java 21');
+    expect(html).toContain('Bouncy Castle Java 1.86');
+    expect(html).toContain(
+      'href="/posts/post-quantum-cryptography-engineers/"',
+    );
+    expect(html).toContain('href="/posts/inside-ml-kem/"');
+    expect(html).toContain(
+      'href="/posts/crypto-agility-java-post-quantum-migration/"',
+    );
+    expect(html).toContain('class="toc"');
+    expect(html).toContain('href="#encryption-is-not-authentication"');
+    expect(html).toContain('href="#signing-and-verifying-in-java"');
+    expect(html).toContain(
+      'aria-label="Link to section: Signing and verifying in Java"',
+    );
+
+    const shareSections =
+      html.match(/class="article-share article-share--(?:compact|full)"/g) ??
+      [];
+    expect(shareSections).toHaveLength(2);
+    expect(html).toContain(`data-copy-url="${canonical}"`);
+    expect(html).not.toContain('Quantum Computing Fundamentals · Part 4');
+    expect(html).not.toMatch(/(?:C:\\Users|\/mnt\/c\/Users|vercel\.app)/i);
+  });
+
+  it('includes both self-hosted diagrams in responsive output and distribution feeds', async () => {
+    const [html, rss, sitemap] = await Promise.all([
+      readFile(mldsaArticlePath, 'utf8'),
+      readFile('dist/rss.xml', 'utf8'),
+      readFile('dist/sitemap-0.xml', 'utf8'),
+    ]);
+    const canonical =
+      'https://blog.jurolc.com/posts/mldsa-post-quantum-digital-signatures';
+    expect(rss).toContain(canonical);
+    expect(sitemap).toContain(`${canonical}/`);
+    expect(html).toContain('class="article-figure"');
+
+    const figures =
+      html
+        .match(
+          /<figure class="(?:post-cover|article-figure)">[\s\S]*?<\/figure>/g,
+        )
+        ?.join('\n') ?? '';
+    const images = figures.match(/<img\b[^>]*>/g) ?? [];
+    expect(images).toHaveLength(2);
+    for (const image of images) {
+      expect(image).toMatch(/\bsrc="\/_astro\//);
+      expect(image).toMatch(/\bsrcset="[^"]*320w/);
+      expect(image).toMatch(/\bsrcset="[^"]*390w/);
+      expect(image).toMatch(/\balt="[^"]+"/);
+      expect(image).toMatch(/width="\d+" height="\d+"/);
+    }
+    expect(images[0]).toContain('alt="Side-by-side comparison showing ML-KEM');
+    expect(images[1]).toContain('alt="Signer using a protected private key');
+    expect(figures).toContain('ML-KEM establishes shared keying material');
+    expect(figures).toContain('Signing produces a signature over bytes');
+    expect(html).not.toMatch(/(?:C:\\Users|\/mnt\/c\/Users)/i);
+    for (const file of [
+      'src/content/posts/images/mldsa-vs-ml-kem.svg',
+      'src/content/posts/images/mldsa-vs-ml-kem.webp',
+      'src/content/posts/images/mldsa-sign-verify.svg',
+      'src/content/posts/images/mldsa-sign-verify.webp',
+    ]) {
+      expect((await readFile(file)).byteLength).toBeGreaterThan(0);
+    }
   });
 });
 
