@@ -12,6 +12,8 @@ const cryptoAgilityArticlePath =
   'dist/posts/crypto-agility-java-post-quantum-migration/index.html';
 const mldsaArticlePath =
   'dist/posts/mldsa-post-quantum-digital-signatures/index.html';
+const entanglementArticlePath =
+  'dist/posts/entanglement-and-bell-states/index.html';
 
 describe('Vercel Web Analytics output', () => {
   it('allows the adapter bootstrap with its exact CSP hash on built pages', async () => {
@@ -370,6 +372,116 @@ describe('built ML-DSA article output', () => {
       'src/content/posts/images/mldsa-sign-verify.webp',
     ]) {
       expect((await readFile(file)).byteLength).toBeGreaterThan(0);
+    }
+  });
+});
+
+describe('built Quantum Computing Fundamentals Part 3 output', () => {
+  it('renders the article, series links, diagrams, and reusable metadata', async () => {
+    const [html, rss, sitemap, part1, part2] = await Promise.all([
+      readFile(entanglementArticlePath, 'utf8'),
+      readFile('dist/rss.xml', 'utf8'),
+      readFile('dist/sitemap-0.xml', 'utf8'),
+      readFile(
+        'dist/posts/classical-vs-quantum-logic-gates/index.html',
+        'utf8',
+      ),
+      readFile(
+        'dist/posts/qubits-superposition-phase-bloch-sphere/index.html',
+        'utf8',
+      ),
+    ]);
+    const canonical =
+      'https://blog.jurolc.com/posts/entanglement-and-bell-states/';
+
+    expect(html).toContain(
+      '<h1>Entanglement and Bell States: A Software Engineer&#39;s Guide</h1>',
+    );
+    expect(html).toContain('Quantum Computing Fundamentals · Part 3');
+    expect(html).toContain(`<link rel="canonical" href="${canonical}">`);
+    expect(html).toContain(`<meta property="og:url" content="${canonical}">`);
+    expect(html).toContain('"@type":"BlogPosting"');
+    expect(html).toContain('href="/posts/classical-vs-quantum-logic-gates/"');
+    expect(html).toContain(
+      'href="/posts/qubits-superposition-phase-bloch-sphere/"',
+    );
+    expect(part1).toContain('Quantum Computing Fundamentals · Part 1');
+    expect(part2).toContain('Quantum Computing Fundamentals · Part 2');
+    expect(html).toContain('href="#build-the-bell-state"');
+    expect(html).toContain(
+      'aria-label="Link to section: Build the Bell state"',
+    );
+    expect(html).toContain('href="#bells-theorem-and-what-experiments-show"');
+    expect(html).toContain(
+      'aria-label="Link to section: Bell’s theorem and what experiments show"',
+    );
+
+    const figures =
+      html
+        .match(
+          /<figure class="(?:post-cover|article-figure)">[\s\S]*?<\/figure>/g,
+        )
+        ?.join('\n') ?? '';
+    const images = figures.match(/<img\b[^>]*>/g) ?? [];
+    expect(images).toHaveLength(2);
+    for (const image of images) {
+      expect(image).toMatch(/\bsrc="\/_astro\//);
+      expect(image).toMatch(/\bsrcset="[^"]*320w/);
+      expect(image).toMatch(/\bsrcset="[^"]*390w/);
+      expect(image).toMatch(/\balt="[^"]+"/);
+      expect(image).toMatch(/width="\d+" height="\d+"/);
+      expect(image).not.toMatch(/\bsrc="https?:/i);
+    }
+    expect(figures).toContain('Hadamard creates a superposition on one qubit');
+    expect(figures).toContain('Entanglement produces joint statistics');
+    expect(figures).toContain(
+      'does not provide a controllable message channel',
+    );
+
+    expect(html).toContain('class="toc"');
+    expect(
+      html.match(/class="article-share article-share--(?:compact|full)"/g),
+    ).toHaveLength(2);
+    expect(html).toContain('class="article-share article-share--compact"');
+    expect(html).toContain('class="article-share article-share--full"');
+    expect(html).toContain(`data-copy-url="${canonical}"`);
+    expect(html).toContain(encodeURIComponent(canonical));
+    expect(html).not.toMatch(
+      /vercel\.app|localhost|(?:C:\\Users|\/mnt\/c\/Users)/i,
+    );
+
+    const ids = [...html.matchAll(/\sid="([^"]+)"/g)].map(([, id]) => id);
+    expect(new Set(ids).size).toBe(ids.length);
+    for (const [, id] of html.matchAll(/<h[23] id="([^"]+)"/g)) {
+      expect(html).toContain(`href="#${id}"`);
+    }
+    expect(rss).toContain(
+      'https://blog.jurolc.com/posts/entanglement-and-bell-states',
+    );
+    expect(sitemap).toContain(canonical);
+  });
+
+  it('keeps both diagram sources self-contained and safe', async () => {
+    for (const path of [
+      'src/content/posts/images/quantum-fundamentals/entanglement-bell-states.svg',
+      'src/content/posts/images/quantum-fundamentals/entanglement-no-signalling.svg',
+    ]) {
+      const svg = await readFile(path, 'utf8');
+      expect(svg).toContain('<svg');
+      expect(svg).toContain('<title');
+      expect(svg).toContain('<desc');
+      expect(svg).not.toMatch(/<(?:script|foreignObject|image)\b/i);
+      expect(svg).not.toMatch(/\son[a-z]+\s*=/i);
+      expect(svg).not.toMatch(/(?:href|xlink:href)=["'](?:https?:|\/\/)/i);
+      expect(svg).not.toMatch(
+        /(?:javascript:|@import|url\(\s*(?:https?:|\/\/))/i,
+      );
+    }
+    for (const path of [
+      'src/content/posts/images/quantum-fundamentals/entanglement-bell-states.webp',
+      'src/content/posts/images/quantum-fundamentals/entanglement-no-signalling.webp',
+    ]) {
+      expect((await readFile(path)).byteLength).toBeGreaterThan(1000);
     }
   });
 });

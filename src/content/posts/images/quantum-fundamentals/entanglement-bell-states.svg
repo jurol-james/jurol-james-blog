@@ -1,0 +1,208 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="900"
+  height="1120"
+  viewBox="0 0 900 1120"
+  role="img"
+  aria-labelledby="title desc"
+>
+  <title id="title">From independent qubits to an entangled Bell state</title>
+  <desc id="desc">
+    Starting with two zero-state qubits, a Hadamard on the first creates the
+    still-separable state plus tensored with zero. A CNOT then produces the
+    entangled Bell state phi plus, an equal-amplitude combination of zero-zero
+    and one-one.
+  </desc>
+  <rect width="900" height="1120" rx="28" fill="#fbfaf7" />
+  <text
+    x="54"
+    y="78"
+    fill="#17301c"
+    font-family="Arial, sans-serif"
+    font-size="40"
+    font-weight="700"
+  >
+    From independent qubits
+  </text>
+  <text
+    x="54"
+    y="128"
+    fill="#17301c"
+    font-family="Arial, sans-serif"
+    font-size="40"
+    font-weight="700"
+  >
+    to an entangled state
+  </text>
+  <rect
+    x="62"
+    y="190"
+    width="776"
+    height="190"
+    rx="22"
+    fill="#f3f6f1"
+    stroke="#b5c1b2"
+    stroke-width="3"
+  />
+  <text
+    x="450"
+    y="238"
+    text-anchor="middle"
+    fill="#275c35"
+    font-family="Arial, sans-serif"
+    font-size="32"
+    font-weight="700"
+  >
+    START · TWO INDEPENDENT QUBITS
+  </text>
+  <text
+    x="450"
+    y="302"
+    text-anchor="middle"
+    fill="#17301c"
+    font-family="Georgia, serif"
+    font-size="46"
+  >
+    |00⟩ = |0⟩ ⊗ |0⟩
+  </text>
+  <text
+    x="450"
+    y="350"
+    text-anchor="middle"
+    fill="#536257"
+    font-family="Arial, sans-serif"
+    font-size="34"
+  >
+    both qubits begin in a basis state
+  </text>
+  <path d="M450 388V440" stroke="#627963" stroke-width="5" />
+  <path
+    d="m432 423 18 20 18-20"
+    fill="none"
+    stroke="#627963"
+    stroke-width="5"
+  />
+  <rect
+    x="62"
+    y="458"
+    width="776"
+    height="230"
+    rx="22"
+    fill="#f3f6f1"
+    stroke="#b5c1b2"
+    stroke-width="3"
+  />
+  <text
+    x="450"
+    y="510"
+    text-anchor="middle"
+    fill="#275c35"
+    font-family="Arial, sans-serif"
+    font-size="34"
+    font-weight="700"
+  >
+    HADAMARD ON q0
+  </text>
+  <text
+    x="450"
+    y="574"
+    text-anchor="middle"
+    fill="#17301c"
+    font-family="Georgia, serif"
+    font-size="42"
+  >
+    (|00⟩ + |10⟩) / √2
+  </text>
+  <text
+    x="450"
+    y="620"
+    text-anchor="middle"
+    fill="#17301c"
+    font-family="Arial, sans-serif"
+    font-size="31"
+    font-weight="700"
+  >
+    STILL SEPARABLE · |+⟩ ⊗ |0⟩
+  </text>
+  <text
+    x="450"
+    y="660"
+    text-anchor="middle"
+    fill="#536257"
+    font-family="Arial, sans-serif"
+    font-size="32"
+  >
+    Hadamard alone has not entangled the pair.
+  </text>
+  <path d="M450 696V748" stroke="#627963" stroke-width="5" />
+  <path
+    d="m432 731 18 20 18-20"
+    fill="none"
+    stroke="#627963"
+    stroke-width="5"
+  />
+  <rect
+    x="62"
+    y="766"
+    width="776"
+    height="230"
+    rx="22"
+    fill="#e8efe6"
+    stroke="#759078"
+    stroke-width="4"
+  />
+  <text
+    x="450"
+    y="818"
+    text-anchor="middle"
+    fill="#275c35"
+    font-family="Arial, sans-serif"
+    font-size="34"
+    font-weight="700"
+  >
+    CNOT · q0 CONTROLS q1
+  </text>
+  <text
+    x="450"
+    y="882"
+    text-anchor="middle"
+    fill="#17301c"
+    font-family="Georgia, serif"
+    font-size="42"
+  >
+    (|00⟩ + |11⟩) / √2
+  </text>
+  <text
+    x="450"
+    y="930"
+    text-anchor="middle"
+    fill="#17301c"
+    font-family="Arial, sans-serif"
+    font-size="34"
+    font-weight="700"
+  >
+    ENTANGLED BELL STATE · |Φ+⟩
+  </text>
+  <text
+    x="450"
+    y="971"
+    text-anchor="middle"
+    fill="#536257"
+    font-family="Arial, sans-serif"
+    font-size="32"
+  >
+    the joint state cannot be factored
+  </text>
+  <rect x="62" y="1030" width="776" height="62" rx="16" fill="#17301c" />
+  <text
+    x="450"
+    y="1071"
+    text-anchor="middle"
+    fill="#ffffff"
+    font-family="Arial, sans-serif"
+    font-size="34"
+    font-weight="700"
+  >
+    Superposition ≠ entanglement
+  </text>
+</svg>

@@ -1,0 +1,182 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="900"
+  height="1020"
+  viewBox="0 0 900 1020"
+  role="img"
+  aria-labelledby="title desc"
+>
+  <title id="title">
+    Entanglement gives correlations, not a communication channel
+  </title>
+  <desc id="desc">
+    A shared Bell pair is followed by separate Alice and Bob measurements. Each
+    local outcome is random. The two can compare their records later over a
+    classical channel; no signalling arrow is shown between them.
+  </desc>
+  <rect width="900" height="1020" rx="28" fill="#fbfaf7" />
+  <text
+    x="54"
+    y="78"
+    fill="#17301c"
+    font-family="Arial, sans-serif"
+    font-size="40"
+    font-weight="700"
+  >
+    Correlation, not communication
+  </text>
+  <text
+    x="54"
+    y="128"
+    fill="#536257"
+    font-family="Arial, sans-serif"
+    font-size="32"
+  >
+    Local outcomes are random; the pair has correlations.
+  </text>
+  <rect
+    x="74"
+    y="178"
+    width="752"
+    height="146"
+    rx="22"
+    fill="#e8efe6"
+    stroke="#759078"
+    stroke-width="4"
+  />
+  <text
+    x="450"
+    y="232"
+    text-anchor="middle"
+    fill="#275c35"
+    font-family="Arial, sans-serif"
+    font-size="34"
+    font-weight="700"
+  >
+    SHARED BELL PAIR · |Φ+⟩
+  </text>
+  <text
+    x="450"
+    y="287"
+    text-anchor="middle"
+    fill="#17301c"
+    font-family="Georgia, serif"
+    font-size="42"
+  >
+    (|00⟩ + |11⟩) / √2
+  </text>
+  <rect
+    x="74"
+    y="366"
+    width="752"
+    height="172"
+    rx="22"
+    fill="#f3f6f1"
+    stroke="#b5c1b2"
+    stroke-width="3"
+  />
+  <text
+    x="450"
+    y="414"
+    text-anchor="middle"
+    fill="#17301c"
+    font-family="Arial, sans-serif"
+    font-size="34"
+    font-weight="700"
+  >
+    ALICE MEASURES
+  </text>
+  <text
+    x="450"
+    y="462"
+    text-anchor="middle"
+    fill="#536257"
+    font-family="Arial, sans-serif"
+    font-size="34"
+  >
+    her local result is random
+  </text>
+  <text
+    x="450"
+    y="508"
+    text-anchor="middle"
+    fill="#17301c"
+    font-family="Arial, sans-serif"
+    font-size="33"
+  >
+    0 or 1
+  </text>
+  <text
+    x="450"
+    y="588"
+    text-anchor="middle"
+    fill="#7b461c"
+    font-family="Arial, sans-serif"
+    font-size="34"
+    font-weight="700"
+  >
+    NO SIGNAL THROUGH ENTANGLEMENT
+  </text>
+  <rect
+    x="74"
+    y="634"
+    width="752"
+    height="172"
+    rx="22"
+    fill="#f3f6f1"
+    stroke="#b5c1b2"
+    stroke-width="3"
+  />
+  <text
+    x="450"
+    y="682"
+    text-anchor="middle"
+    fill="#17301c"
+    font-family="Arial, sans-serif"
+    font-size="34"
+    font-weight="700"
+  >
+    BOB MEASURES
+  </text>
+  <text
+    x="450"
+    y="730"
+    text-anchor="middle"
+    fill="#536257"
+    font-family="Arial, sans-serif"
+    font-size="34"
+  >
+    his local result is random
+  </text>
+  <text
+    x="450"
+    y="776"
+    text-anchor="middle"
+    fill="#17301c"
+    font-family="Arial, sans-serif"
+    font-size="33"
+  >
+    0 or 1
+  </text>
+  <rect x="74" y="858" width="752" height="110" rx="18" fill="#17301c" />
+  <text
+    x="450"
+    y="902"
+    text-anchor="middle"
+    fill="#ffffff"
+    font-family="Arial, sans-serif"
+    font-size="32"
+  >
+    They compare correlated results later
+  </text>
+  <text
+    x="450"
+    y="940"
+    text-anchor="middle"
+    fill="#eef4ec"
+    font-family="Arial, sans-serif"
+    font-size="32"
+  >
+    using ordinary classical communication.
+  </text>
+</svg>
