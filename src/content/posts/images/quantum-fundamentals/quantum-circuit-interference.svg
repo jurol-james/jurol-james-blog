@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1120" role="img" aria-labelledby="title desc">
+  <title id="title">How quantum interference changes outcomes</title>
+  <desc id="desc">Two circuits start in zero. Hadamard followed by Hadamard produces zero through reinforcement and cancellation. Hadamard, Z, and Hadamard produce one because Z changes the relative phase.</desc>
+  <rect width="1000" height="1120" rx="28" fill="#f5f7f4"/>
+  <text x="500" y="62" text-anchor="middle" fill="#183c32" font-family="Arial, Helvetica, sans-serif" font-size="32" font-weight="700">How quantum interference changes outcomes</text>
+  <text x="500" y="108" text-anchor="middle" fill="#49645b" font-family="Arial, Helvetica, sans-serif" font-size="26">Same input · no mid-circuit measurement</text>
+
+  <rect x="32" y="142" width="936" height="410" rx="20" fill="#ffffff" stroke="#c8d6ce" stroke-width="3"/>
+  <text x="64" y="196" fill="#256b53" font-family="Arial, Helvetica, sans-serif" font-size="30" font-weight="700">CIRCUIT A · H → H</text>
+  <text x="64" y="314" fill="#183c32" font-family="Arial, Helvetica, sans-serif" font-size="30">|0⟩</text>
+  <line x1="126" y1="304" x2="474" y2="304" stroke="#35574b" stroke-width="5"/>
+  <rect x="175" y="267" width="70" height="74" rx="10" fill="#e2efe8" stroke="#35765c" stroke-width="3"/>
+  <text x="210" y="317" text-anchor="middle" fill="#183c32" font-family="Arial, Helvetica, sans-serif" font-size="34" font-weight="700">H</text>
+  <rect x="270" y="267" width="70" height="74" rx="10" fill="#e2efe8" stroke="#35765c" stroke-width="3"/>
+  <text x="305" y="317" text-anchor="middle" fill="#183c32" font-family="Arial, Helvetica, sans-serif" font-size="34" font-weight="700">H</text>
+  <rect x="365" y="267" width="70" height="74" rx="10" fill="#eef0f7" stroke="#7469a8" stroke-width="3"/>
+  <text x="400" y="317" text-anchor="middle" fill="#38345d" font-family="Arial, Helvetica, sans-serif" font-size="30" font-weight="700">M</text>
+  <text x="480" y="314" fill="#183c32" font-family="Arial, Helvetica, sans-serif" font-size="30">|0⟩</text>
+  <text x="620" y="266" fill="#183c32" font-family="Arial, Helvetica, sans-serif" font-size="28">Final: |0⟩</text>
+  <text x="620" y="306" fill="#183c32" font-family="Arial, Helvetica, sans-serif" font-size="28">P(0) = 1</text>
+  <text x="620" y="356" fill="#49645b" font-family="Arial, Helvetica, sans-serif" font-size="24">|0⟩: +½ +½ = 1</text>
+  <text x="620" y="390" fill="#49645b" font-family="Arial, Helvetica, sans-serif" font-size="24">|1⟩: +½ −½ = 0</text>
+  <text x="620" y="448" fill="#256b53" font-family="Arial, Helvetica, sans-serif" font-size="26" font-weight="700">|0⟩ reinforces</text>
+  <text x="620" y="482" fill="#256b53" font-family="Arial, Helvetica, sans-serif" font-size="26" font-weight="700">|1⟩ cancels</text>
+
+  <rect x="32" y="578" width="936" height="410" rx="20" fill="#ffffff" stroke="#c8d6ce" stroke-width="3"/>
+  <text x="64" y="632" fill="#256b53" font-family="Arial, Helvetica, sans-serif" font-size="30" font-weight="700">CIRCUIT B · H → Z → H</text>
+  <text x="64" y="750" fill="#183c32" font-family="Arial, Helvetica, sans-serif" font-size="30">|0⟩</text>
+  <line x1="126" y1="740" x2="482" y2="740" stroke="#35574b" stroke-width="5"/>
+  <rect x="160" y="703" width="64" height="74" rx="10" fill="#e2efe8" stroke="#35765c" stroke-width="3"/>
+  <text x="192" y="753" text-anchor="middle" fill="#183c32" font-family="Arial, Helvetica, sans-serif" font-size="34" font-weight="700">H</text>
+  <rect x="245" y="703" width="64" height="74" rx="10" fill="#f4e8d7" stroke="#a97732" stroke-width="3"/>
+  <text x="277" y="753" text-anchor="middle" fill="#603f16" font-family="Arial, Helvetica, sans-serif" font-size="34" font-weight="700">Z</text>
+  <rect x="330" y="703" width="64" height="74" rx="10" fill="#e2efe8" stroke="#35765c" stroke-width="3"/>
+  <text x="362" y="753" text-anchor="middle" fill="#183c32" font-family="Arial, Helvetica, sans-serif" font-size="34" font-weight="700">H</text>
+  <rect x="415" y="703" width="64" height="74" rx="10" fill="#eef0f7" stroke="#7469a8" stroke-width="3"/>
+  <text x="447" y="753" text-anchor="middle" fill="#38345d" font-family="Arial, Helvetica, sans-serif" font-size="28" font-weight="700">M</text>
+  <text x="485" y="750" fill="#183c32" font-family="Arial, Helvetica, sans-serif" font-size="30">|1⟩</text>
+  <text x="620" y="702" fill="#183c32" font-family="Arial, Helvetica, sans-serif" font-size="28">Final: |1⟩</text>
+  <text x="620" y="742" fill="#183c32" font-family="Arial, Helvetica, sans-serif" font-size="28">P(1) = 1</text>
+  <text x="620" y="792" fill="#49645b" font-family="Arial, Helvetica, sans-serif" font-size="24">|0⟩: +½ −½ = 0</text>
+  <text x="620" y="826" fill="#49645b" font-family="Arial, Helvetica, sans-serif" font-size="24">|1⟩: +½ +½ = 1</text>
+  <text x="620" y="884" fill="#256b53" font-family="Arial, Helvetica, sans-serif" font-size="25" font-weight="700">Z reverses the pattern:</text>
+  <text x="620" y="914" fill="#256b53" font-family="Arial, Helvetica, sans-serif" font-size="25" font-weight="700">|0⟩ cancels</text>
+  <text x="620" y="948" fill="#256b53" font-family="Arial, Helvetica, sans-serif" font-size="25" font-weight="700">|1⟩ reinforces</text>
+  <text x="500" y="1060" text-anchor="middle" fill="#49645b" font-family="Arial, Helvetica, sans-serif" font-size="25">Amplitudes combine first; probabilities follow measurement.</text>
+</svg>

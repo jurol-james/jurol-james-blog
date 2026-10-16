@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 1240" role="img" aria-labelledby="title desc">
+  <title id="title">Deutsch's algorithm circuit</title>
+  <desc id="desc">Two-qubit circuit initializes x to zero and y to one, applies Hadamard gates to both, queries a general reversible Uf oracle once, applies a final Hadamard to x, and measures x. Zero means constant and one means balanced.</desc>
+  <rect width="1100" height="1240" rx="30" fill="#f5f7f4"/>
+  <text x="550" y="68" text-anchor="middle" fill="#183c32" font-family="Arial, Helvetica, sans-serif" font-size="44" font-weight="700">Deutsch’s algorithm</text>
+  <text x="550" y="118" text-anchor="middle" fill="#49645b" font-family="Arial, Helvetica, sans-serif" font-size="32">One oracle query · measure the input</text>
+
+  <rect x="36" y="158" width="1028" height="690" rx="24" fill="#ffffff" stroke="#c8d6ce" stroke-width="3"/>
+  <text x="78" y="332" fill="#183c32" font-family="Arial, Helvetica, sans-serif" font-size="38" font-weight="700">x</text>
+  <text x="78" y="590" fill="#183c32" font-family="Arial, Helvetica, sans-serif" font-size="38" font-weight="700">y</text>
+  <text x="145" y="332" fill="#183c32" font-family="Arial, Helvetica, sans-serif" font-size="36">|0⟩</text>
+  <text x="145" y="590" fill="#183c32" font-family="Arial, Helvetica, sans-serif" font-size="36">|1⟩</text>
+  <line x1="220" y1="320" x2="1000" y2="320" stroke="#35574b" stroke-width="5"/>
+  <line x1="220" y1="578" x2="1000" y2="578" stroke="#35574b" stroke-width="5"/>
+
+  <rect x="280" y="276" width="104" height="88" rx="12" fill="#e2efe8" stroke="#35765c" stroke-width="3"/>
+  <text x="332" y="336" text-anchor="middle" fill="#183c32" font-family="Arial, Helvetica, sans-serif" font-size="42" font-weight="700">H</text>
+  <rect x="280" y="534" width="104" height="88" rx="12" fill="#e2efe8" stroke="#35765c" stroke-width="3"/>
+  <text x="332" y="594" text-anchor="middle" fill="#183c32" font-family="Arial, Helvetica, sans-serif" font-size="42" font-weight="700">H</text>
+
+  <rect x="438" y="262" width="270" height="374" rx="18" fill="#edf2ed" stroke="#527365" stroke-width="4"/>
+  <text x="573" y="330" text-anchor="middle" fill="#183c32" font-family="Arial, Helvetica, sans-serif" font-size="44" font-weight="700">U<tspan baseline-shift="sub" font-size="30">f</tspan></text>
+  <text x="573" y="382" text-anchor="middle" fill="#35574b" font-family="Arial, Helvetica, sans-serif" font-size="32">one query</text>
+  <text x="573" y="450" text-anchor="middle" fill="#35574b" font-family="Arial, Helvetica, sans-serif" font-size="28">|x,y⟩</text>
+  <text x="573" y="492" text-anchor="middle" fill="#35574b" font-family="Arial, Helvetica, sans-serif" font-size="28">→ |x, y ⊕ f(x)⟩</text>
+  <text x="573" y="566" text-anchor="middle" fill="#49645b" font-family="Arial, Helvetica, sans-serif" font-size="26">general reversible</text>
+  <text x="573" y="604" text-anchor="middle" fill="#49645b" font-family="Arial, Helvetica, sans-serif" font-size="26">oracle</text>
+
+  <rect x="760" y="276" width="104" height="88" rx="12" fill="#e2efe8" stroke="#35765c" stroke-width="3"/>
+  <text x="812" y="336" text-anchor="middle" fill="#183c32" font-family="Arial, Helvetica, sans-serif" font-size="42" font-weight="700">H</text>
+  <rect x="900" y="276" width="92" height="88" rx="12" fill="#eef0f7" stroke="#7469a8" stroke-width="3"/>
+  <text x="946" y="336" text-anchor="middle" fill="#38345d" font-family="Arial, Helvetica, sans-serif" font-size="38" font-weight="700">M</text>
+  <line x1="946" y1="364" x2="946" y2="420" stroke="#7469a8" stroke-width="4"/>
+  <line x1="946" y1="420" x2="1010" y2="420" stroke="#7469a8" stroke-width="4"/>
+  <text x="1015" y="432" fill="#38345d" font-family="Arial, Helvetica, sans-serif" font-size="32">c</text>
+
+  <text x="76" y="790" fill="#49645b" font-family="Arial, Helvetica, sans-serif" font-size="28">The ancilla stays |−⟩ and is not measured.</text>
+
+  <rect x="52" y="900" width="480" height="240" rx="20" fill="#e6f1e9" stroke="#78a58d" stroke-width="3"/>
+  <text x="292" y="966" text-anchor="middle" fill="#256b53" font-family="Arial, Helvetica, sans-serif" font-size="34" font-weight="700">MEASURE x = 0</text>
+  <text x="292" y="1024" text-anchor="middle" fill="#183c32" font-family="Arial, Helvetica, sans-serif" font-size="30">f(0) = f(1)</text>
+  <text x="292" y="1072" text-anchor="middle" fill="#49645b" font-family="Arial, Helvetica, sans-serif" font-size="28">constant · ideal probability 1</text>
+  <rect x="568" y="900" width="480" height="240" rx="20" fill="#f3ecdf" stroke="#c6a36b" stroke-width="3"/>
+  <text x="808" y="966" text-anchor="middle" fill="#76521e" font-family="Arial, Helvetica, sans-serif" font-size="34" font-weight="700">MEASURE x = 1</text>
+  <text x="808" y="1024" text-anchor="middle" fill="#183c32" font-family="Arial, Helvetica, sans-serif" font-size="30">f(0) ≠ f(1)</text>
+  <text x="808" y="1072" text-anchor="middle" fill="#49645b" font-family="Arial, Helvetica, sans-serif" font-size="28">balanced · ideal probability 1</text>
+  <text x="550" y="1200" text-anchor="middle" fill="#49645b" font-family="Arial, Helvetica, sans-serif" font-size="26">An oracle-query example under a promise, not a hardware speedup claim.</text>
+</svg>
