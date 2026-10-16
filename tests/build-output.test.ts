@@ -888,6 +888,12 @@ describe('Quantum Computing Fundamentals Part 4 output', () => {
     expect(html).toContain('"@type":"BlogPosting"');
     expect(html).toContain('Probabilities themselves do not cancel.');
     expect(html).toContain('Deutsch’s algorithm');
+    expect(html).toMatch(
+      /ideal simulator[\s\S]{0,100}state-vector and shot-based execution[\s\S]{0,120}all four Deutsch oracle cases with certainty/i,
+    );
+    expect(html).toMatch(
+      /Contrary outcomes may appear on noisy hardware or in simulations with an explicitly configured noise model/i,
+    );
     expect(html).toContain('href="#from-quantum-states-to-quantum-programs"');
     expect(html).toContain(
       'aria-label="Link to section: From quantum states to quantum programs"',
