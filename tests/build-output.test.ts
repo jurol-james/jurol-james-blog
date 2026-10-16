@@ -14,6 +14,8 @@ const mldsaArticlePath =
   'dist/posts/mldsa-post-quantum-digital-signatures/index.html';
 const entanglementArticlePath =
   'dist/posts/entanglement-and-bell-states/index.html';
+const quantumInterferenceArticlePath =
+  'dist/posts/quantum-circuits-and-interference/index.html';
 
 describe('Vercel Web Analytics output', () => {
   it('allows the adapter bootstrap with its exact CSP hash on built pages', async () => {
@@ -855,5 +857,101 @@ describe('post-quantum cryptography part 3 output', () => {
     expect(imageTags.filter((image) => /\bsrc="https?:/i.test(image))).toEqual(
       [],
     );
+  });
+});
+
+describe('Quantum Computing Fundamentals Part 4 output', () => {
+  it('renders Quantum Computing Fundamentals Part 4 with local diagrams and series links', async () => {
+    const [html, rss, sitemap, part1, part2, part3] = await Promise.all([
+      readFile(quantumInterferenceArticlePath, 'utf8'),
+      readFile('dist/rss.xml', 'utf8'),
+      readFile('dist/sitemap-0.xml', 'utf8'),
+      readFile(
+        'dist/posts/classical-vs-quantum-logic-gates/index.html',
+        'utf8',
+      ),
+      readFile(
+        'dist/posts/qubits-superposition-phase-bloch-sphere/index.html',
+        'utf8',
+      ),
+      readFile(entanglementArticlePath, 'utf8'),
+    ]);
+    const canonical =
+      'https://blog.jurolc.com/posts/quantum-circuits-and-interference/';
+    const title =
+      'Quantum Circuits and Interference: How Quantum Programs Actually Compute';
+
+    expect(html).toContain(`<h1>${title}</h1>`);
+    expect(html).toContain('Quantum Computing Fundamentals · Part 4');
+    expect(html).toContain(`<link rel="canonical" href="${canonical}">`);
+    expect(html).toContain(`<meta property="og:url" content="${canonical}">`);
+    expect(html).toContain('"@type":"BlogPosting"');
+    expect(html).toContain('Probabilities themselves do not cancel.');
+    expect(html).toContain('Deutsch’s algorithm');
+    expect(html).toContain('href="#from-quantum-states-to-quantum-programs"');
+    expect(html).toContain(
+      'aria-label="Link to section: From quantum states to quantum programs"',
+    );
+    for (const route of [
+      '/posts/classical-vs-quantum-logic-gates/',
+      '/posts/qubits-superposition-phase-bloch-sphere/',
+      '/posts/entanglement-and-bell-states/',
+    ]) {
+      expect(html).toContain(`href="${route}"`);
+    }
+
+    expect(rss).toContain(title);
+    expect(rss).toContain(canonical.slice(0, -1));
+    expect(sitemap).toContain(canonical);
+    expect(part1).toContain('Quantum Computing Fundamentals · Part 1');
+    expect(part2).toContain('Quantum Computing Fundamentals · Part 2');
+    expect(part3).toContain('Quantum Computing Fundamentals · Part 3');
+    expect(html).not.toContain('Post-Quantum Cryptography · Part 4');
+
+    const figures =
+      html
+        .match(
+          /<figure class="(?:post-cover|article-figure)">[\s\S]*?<\/figure>/g,
+        )
+        ?.join('\n') ?? '';
+    expect((figures.match(/<img\b/g) ?? []).length).toBe(2);
+    for (const image of figures.match(/<img\b[^>]*>/g) ?? []) {
+      expect(image).toMatch(/\bsrc="\/_astro\//);
+      expect(image).toMatch(/\bsrcset="[^"]*320w/);
+      expect(image).toMatch(/\bsrcset="[^"]*390w/);
+      expect(image).toMatch(/\balt="[^"]+"/);
+      expect(image).toMatch(/width="\d+" height="\d+"/);
+      expect(image).not.toMatch(/\bsrc="https?:/i);
+    }
+    expect(figures).toContain('reinforces the zero amplitude');
+    expect(figures).toContain(
+      'Deutsch’s circuit queries the promised function once',
+    );
+    expect(html).toContain('data-copy-url="' + canonical + '"');
+    expect(
+      html.match(/class="article-share article-share--(?:compact|full)"/g),
+    ).toHaveLength(2);
+    expect(html).not.toMatch(/(?:C:\\Users|\/mnt\/c\/Users|vercel\.app)/i);
+
+    for (const asset of [
+      'src/content/posts/images/quantum-fundamentals/quantum-circuit-interference.svg',
+      'src/content/posts/images/quantum-fundamentals/quantum-circuit-interference.webp',
+      'src/content/posts/images/quantum-fundamentals/deutsch-algorithm-circuit.svg',
+      'src/content/posts/images/quantum-fundamentals/deutsch-algorithm-circuit.webp',
+    ]) {
+      expect((await readFile(asset)).byteLength).toBeGreaterThan(0);
+    }
+    for (const svgPath of [
+      'src/content/posts/images/quantum-fundamentals/quantum-circuit-interference.svg',
+      'src/content/posts/images/quantum-fundamentals/deutsch-algorithm-circuit.svg',
+    ]) {
+      const svg = await readFile(svgPath, 'utf8');
+      expect(svg).not.toMatch(/<(?:script|foreignObject|image)\b/i);
+      expect(svg).not.toMatch(/\son[a-z]+\s*=/i);
+      expect(svg).not.toMatch(/(?:href|xlink:href)=["'](?:https?:|\/\/)/i);
+      expect(svg).not.toMatch(
+        /(?:@import|javascript:|url\(\s*(?:https?:|\/\/))/i,
+      );
+    }
   });
 });
