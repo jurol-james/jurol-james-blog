@@ -1,0 +1,197 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="1200"
+  height="1320"
+  viewBox="0 0 1200 1320"
+  role="img"
+  aria-labelledby="title desc"
+>
+  <title id="title">SLH-DSA: hash-based signature architecture</title>
+  <desc id="desc">
+    A conceptual FIPS 205 flow. A message and prescribed randomization produce a
+    digest signed by FORS. The recoverable FORS public key is authenticated by
+    WOTS+ signatures and XMSS Merkle paths through hypertree layers to the
+    public-key root used for verification.
+  </desc>
+  <rect width="1200" height="1320" rx="32" fill="#f5f4ef" />
+  <text
+    x="64"
+    y="75"
+    fill="#315c3b"
+    font-family="Arial,sans-serif"
+    font-size="24"
+    font-weight="700"
+    letter-spacing="2"
+  >
+    FIPS 205 · CONCEPTUAL COMPONENT MAP
+  </text>
+  <text
+    x="64"
+    y="138"
+    fill="#17301c"
+    font-family="Arial,sans-serif"
+    font-size="48"
+    font-weight="700"
+  >
+    SLH-DSA: hash-based signatures
+  </text>
+  <text
+    x="64"
+    y="184"
+    fill="#526052"
+    font-family="Arial,sans-serif"
+    font-size="26"
+  >
+    Few-time signing is linked to a trusted root through layered tree
+    authentication.
+  </text>
+
+  <g font-family="Arial,sans-serif" text-anchor="middle">
+    <rect
+      x="95"
+      y="225"
+      width="1010"
+      height="112"
+      rx="22"
+      fill="#fff"
+      stroke="#b8c7b5"
+      stroke-width="4"
+    />
+    <text x="600" y="273" fill="#17301c" font-size="31" font-weight="700">
+      Message + prescribed signing randomization
+    </text>
+    <text x="600" y="313" fill="#526052" font-size="23">
+      standard-defined message processing
+    </text>
+
+    <path d="M600 337v42" stroke="#315c3b" stroke-width="7" />
+    <path
+      d="m583 365 17 20 17-20"
+      fill="none"
+      stroke="#315c3b"
+      stroke-width="7"
+    />
+    <rect
+      x="95"
+      y="390"
+      width="1010"
+      height="112"
+      rx="22"
+      fill="#eaf0e8"
+      stroke="#b8c7b5"
+      stroke-width="4"
+    />
+    <text x="600" y="438" fill="#17301c" font-size="31" font-weight="700">
+      Message digest
+    </text>
+    <text x="600" y="478" fill="#526052" font-size="23">
+      selects the FORS material used for this signature
+    </text>
+
+    <path d="M600 502v42" stroke="#315c3b" stroke-width="7" />
+    <path
+      d="m583 530 17 20 17-20"
+      fill="none"
+      stroke="#315c3b"
+      stroke-width="7"
+    />
+    <rect
+      x="95"
+      y="555"
+      width="1010"
+      height="126"
+      rx="22"
+      fill="#f3e9dc"
+      stroke="#d9c2a8"
+      stroke-width="4"
+    />
+    <text x="600" y="605" fill="#49341f" font-size="35" font-weight="700">
+      FORS
+    </text>
+    <text x="600" y="648" fill="#634b31" font-size="24">
+      few-time signature; verifier can recover its public-key value
+    </text>
+
+    <text
+      x="64"
+      y="739"
+      text-anchor="start"
+      fill="#315c3b"
+      font-size="23"
+      font-weight="700"
+      letter-spacing="1.5"
+    >
+      AUTHENTICATE THAT VALUE UP TO THE PUBLIC KEY ROOT
+    </text>
+
+    <path d="M600 802v35" stroke="#315c3b" stroke-width="7" />
+    <path
+      d="m583 823 17 20 17-20"
+      fill="none"
+      stroke="#315c3b"
+      stroke-width="7"
+    />
+    <rect
+      x="95"
+      y="850"
+      width="1010"
+      height="130"
+      rx="22"
+      fill="#fff"
+      stroke="#b8c7b5"
+      stroke-width="4"
+    />
+    <text x="600" y="903" fill="#17301c" font-size="31" font-weight="700">
+      XMSS layer: WOTS+ signature + Merkle path
+    </text>
+    <text x="600" y="945" fill="#526052" font-size="23">
+      authenticates a value at a tree root
+    </text>
+
+    <path d="M600 980v35" stroke="#315c3b" stroke-width="7" />
+    <path
+      d="m583 1001 17 20 17-20"
+      fill="none"
+      stroke="#315c3b"
+      stroke-width="7"
+    />
+    <rect
+      x="95"
+      y="1028"
+      width="1010"
+      height="130"
+      rx="22"
+      fill="#eaf0e8"
+      stroke="#b8c7b5"
+      stroke-width="4"
+    />
+    <text x="600" y="1081" fill="#17301c" font-size="31" font-weight="700">
+      Hypertree: additional XMSS layers
+    </text>
+    <text x="600" y="1123" fill="#526052" font-size="23">
+      WOTS+ signatures and paths authenticate lower roots
+    </text>
+
+    <path d="M600 1158v33" stroke="#315c3b" stroke-width="7" />
+    <path
+      d="m583 1177 17 20 17-20"
+      fill="none"
+      stroke="#315c3b"
+      stroke-width="7"
+    />
+    <rect x="95" y="1200" width="1010" height="72" rx="20" fill="#17301c" />
+    <text x="600" y="1247" fill="#fff" font-size="29" font-weight="700">
+      Trusted public-key root · verification target
+    </text>
+  </g>
+  <text
+    x="1132"
+    y="1304"
+    text-anchor="end"
+    fill="#69716a"
+    font-family="Arial,sans-serif"
+    font-size="17"
+  >
+    Conceptual only · FIPS 205 defines exact algorithms and encodings
+  </text>
+</svg>
