@@ -12,6 +12,8 @@ const cryptoAgilityArticlePath =
   'dist/posts/crypto-agility-java-post-quantum-migration/index.html';
 const mldsaArticlePath =
   'dist/posts/mldsa-post-quantum-digital-signatures/index.html';
+const slhDsaArticlePath =
+  'dist/posts/slh-dsa-hash-based-post-quantum-signatures/index.html';
 const entanglementArticlePath =
   'dist/posts/entanglement-and-bell-states/index.html';
 const quantumInterferenceArticlePath =
@@ -958,6 +960,115 @@ describe('Quantum Computing Fundamentals Part 4 output', () => {
       expect(svg).not.toMatch(
         /(?:@import|javascript:|url\(\s*(?:https?:|\/\/))/i,
       );
+    }
+  });
+});
+
+describe('built Post-Quantum Cryptography Part 5 output', () => {
+  it('renders SLH-DSA with the correct series metadata and links to Parts 1–4', async () => {
+    const [html, rss, sitemap] = await Promise.all([
+      readFile(slhDsaArticlePath, 'utf8'),
+      readFile('dist/rss.xml', 'utf8'),
+      readFile('dist/sitemap-0.xml', 'utf8'),
+    ]);
+    const canonical =
+      'https://blog.jurolc.com/posts/slh-dsa-hash-based-post-quantum-signatures/';
+    const title =
+      'SLH-DSA: Understanding Hash-Based Post-Quantum Digital Signatures';
+
+    expect(html).toContain(`<h1>${title}</h1>`);
+    expect(html).toContain('Post-Quantum Cryptography · Part 5');
+    expect(html).toContain('FIPS 205');
+    expect(html).toContain('Bouncy Castle Java 1.86');
+    expect(html).toContain(
+      'name="description" content="A software engineer\'s guide to SLH-DSA',
+    );
+    expect(html).toContain(`<link rel="canonical" href="${canonical}">`);
+    expect(html).toContain(`<meta property="og:url" content="${canonical}">`);
+    expect(html).toContain(
+      'og:description" content="A software engineer\'s guide to SLH-DSA',
+    );
+    expect(html).toContain(
+      'og:image" content="https://blog.jurolc.com/_astro/',
+    );
+    expect(html).toContain('"@type":"BlogPosting"');
+    expect(html).toContain('class="toc"');
+    expect(html).toContain('class="post-cover"');
+    expect(html).toContain('href="#slh-dsa-parameter-sets"');
+    expect(html).toContain(
+      'aria-label="Link to section: SLH-DSA parameter sets"',
+    );
+    expect(html).toContain('class="article-share article-share--compact"');
+    expect(html).toContain('class="article-share article-share--full"');
+    expect(html).toContain(`data-copy-url="${canonical}"`);
+
+    for (const route of [
+      '/posts/post-quantum-cryptography-engineers/',
+      '/posts/inside-ml-kem/',
+      '/posts/crypto-agility-java-post-quantum-migration/',
+      '/posts/mldsa-post-quantum-digital-signatures/',
+    ]) {
+      expect(html).toContain(`href="${route}"`);
+    }
+    expect(html).not.toContain('Quantum Computing Fundamentals · Part 5');
+    expect(html).not.toMatch(/(?:C:\\Users|\/mnt\/c\/Users|vercel\.app)/i);
+
+    const figures =
+      html
+        .match(
+          /<figure class="(?:post-cover|article-figure)">[\s\S]*?<\/figure>/g,
+        )
+        ?.join('\n') ?? '';
+    const images = figures.match(/<img\b[^>]*>/g) ?? [];
+    expect(images).toHaveLength(2);
+    for (const image of images) {
+      expect(image).toMatch(/\bsrc="\/_astro\//);
+      expect(image).toMatch(/\bsrcset="[^"]*320w/);
+      expect(image).toMatch(/\bsrcset="[^"]*390w/);
+      expect(image).toMatch(/\balt="[^"]+"/);
+      expect(image).toMatch(/width="\d+" height="\d+"/);
+      expect(image).not.toMatch(/\bsrc="https?:/i);
+    }
+    expect(figures).toContain('FORS signature');
+    expect(figures).toContain('WOTS+');
+    expect(figures).toContain('neither is universally superior');
+
+    expect(rss).toContain(title);
+    expect(rss).toContain(canonical.slice(0, -1));
+    expect(sitemap).toContain(canonical);
+    const slhDsaTag = await readFile('dist/tags/slh-dsa/index.html', 'utf8');
+    expect(slhDsaTag).toContain(
+      '/posts/slh-dsa-hash-based-post-quantum-signatures/',
+    );
+  });
+
+  it('includes self-hosted, passive SVG sources and optimized display assets', async () => {
+    for (const [svgPath, webpPath] of [
+      [
+        'src/content/posts/images/slh-dsa-architecture.svg',
+        'src/content/posts/images/slh-dsa-architecture.webp',
+      ],
+      [
+        'src/content/posts/images/slh-dsa-vs-mldsa.svg',
+        'src/content/posts/images/slh-dsa-vs-mldsa.webp',
+      ],
+    ]) {
+      const svg = await readFile(svgPath, 'utf8');
+      const webp = await readFile(webpPath);
+      expect(svg).toContain('<title');
+      expect(svg).toContain('<desc');
+      expect(svg).not.toMatch(/<(?:script|foreignObject|image)\b/i);
+      expect(svg).not.toMatch(/\son[a-z]+\s*=/i);
+      expect(svg).not.toMatch(/(?:href|xlink:href)=["'](?:https?:|\/\/)/i);
+      expect(svg).not.toMatch(
+        /(?:@import|javascript:|url\(\s*(?:https?:|\/\/))/i,
+      );
+      expect(webp.subarray(0, 4).toString()).toBe('RIFF');
+      expect(webp.subarray(8, 12).toString()).toBe('WEBP');
+      if (svgPath.endsWith('slh-dsa-vs-mldsa.svg')) {
+        expect(svg).toContain('signature 16,224 bytes');
+        expect(svg).toContain('signature 3,309 bytes');
+      }
     }
   });
 });

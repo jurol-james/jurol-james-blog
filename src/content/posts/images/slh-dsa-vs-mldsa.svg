@@ -1,0 +1,233 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="1200"
+  height="1260"
+  viewBox="0 0 1200 1260"
+  role="img"
+  aria-labelledby="title desc"
+>
+  <title id="title">Two post-quantum signature approaches</title>
+  <desc id="desc">
+    ML-DSA uses a module-lattice construction and SLH-DSA uses a stateless
+    hash-based construction. Both sign and verify messages. The illustration
+    highlights different assumptions and shows example raw key and signature
+    sizes without ranking speed.
+  </desc>
+  <rect width="1200" height="1260" rx="32" fill="#f5f4ef" />
+  <text
+    x="64"
+    y="75"
+    fill="#315c3b"
+    font-family="Arial,sans-serif"
+    font-size="24"
+    font-weight="700"
+    letter-spacing="2"
+  >
+    POST-QUANTUM DIGITAL SIGNATURES
+  </text>
+  <text
+    x="64"
+    y="138"
+    fill="#17301c"
+    font-family="Arial,sans-serif"
+    font-size="48"
+    font-weight="700"
+  >
+    Two approaches, one purpose
+  </text>
+  <text
+    x="64"
+    y="182"
+    fill="#526052"
+    font-family="Arial,sans-serif"
+    font-size="25"
+  >
+    Both sign bytes and let a verifier check them with a public key.
+  </text>
+
+  <rect
+    x="64"
+    y="225"
+    width="1072"
+    height="405"
+    rx="28"
+    fill="#eaf0e8"
+    stroke="#b8c7b5"
+    stroke-width="4"
+  />
+  <text
+    x="108"
+    y="287"
+    fill="#17301c"
+    font-family="Arial,sans-serif"
+    font-size="40"
+    font-weight="700"
+  >
+    ML-DSA
+  </text>
+  <text
+    x="108"
+    y="331"
+    fill="#315c3b"
+    font-family="Arial,sans-serif"
+    font-size="25"
+    font-weight="700"
+  >
+    FIPS 204 · module-lattice-based
+  </text>
+  <rect x="108" y="360" width="984" height="76" rx="17" fill="#fff" />
+  <text
+    x="600"
+    y="409"
+    text-anchor="middle"
+    fill="#17301c"
+    font-family="Arial,sans-serif"
+    font-size="27"
+    font-weight="700"
+  >
+    Structured module-lattice assumptions
+  </text>
+  <rect x="108" y="458" width="984" height="67" rx="17" fill="#17301c" />
+  <text
+    x="600"
+    y="502"
+    text-anchor="middle"
+    fill="#fff"
+    font-family="Arial,sans-serif"
+    font-size="27"
+    font-weight="700"
+  >
+    SIGN · VERIFY
+  </text>
+  <text
+    x="600"
+    y="562"
+    text-anchor="middle"
+    fill="#17301c"
+    font-family="Arial,sans-serif"
+    font-size="24"
+    font-weight="700"
+  >
+    Example · ML-DSA-65 · category 3
+  </text>
+  <text
+    x="600"
+    y="600"
+    text-anchor="middle"
+    fill="#526052"
+    font-family="Arial,sans-serif"
+    font-size="23"
+  >
+    Raw public key 1,952 bytes · signature 3,309 bytes
+  </text>
+
+  <rect
+    x="64"
+    y="670"
+    width="1072"
+    height="405"
+    rx="28"
+    fill="#f3e9dc"
+    stroke="#d9c2a8"
+    stroke-width="4"
+  />
+  <text
+    x="108"
+    y="732"
+    fill="#49341f"
+    font-family="Arial,sans-serif"
+    font-size="40"
+    font-weight="700"
+  >
+    SLH-DSA
+  </text>
+  <text
+    x="108"
+    y="776"
+    fill="#805d37"
+    font-family="Arial,sans-serif"
+    font-size="25"
+    font-weight="700"
+  >
+    FIPS 205 · stateless hash-based
+  </text>
+  <rect x="108" y="805" width="984" height="76" rx="17" fill="#fff" />
+  <text
+    x="600"
+    y="854"
+    text-anchor="middle"
+    fill="#49341f"
+    font-family="Arial,sans-serif"
+    font-size="27"
+    font-weight="700"
+  >
+    FORS + WOTS+ signatures and XMSS trees
+  </text>
+  <rect x="108" y="903" width="984" height="67" rx="17" fill="#49341f" />
+  <text
+    x="600"
+    y="947"
+    text-anchor="middle"
+    fill="#fff"
+    font-family="Arial,sans-serif"
+    font-size="27"
+    font-weight="700"
+  >
+    SIGN · VERIFY
+  </text>
+  <text
+    x="600"
+    y="1004"
+    text-anchor="middle"
+    fill="#49341f"
+    font-family="Arial,sans-serif"
+    font-size="24"
+    font-weight="700"
+  >
+    Example · SLH-DSA-SHA2-192s · category 3
+  </text>
+  <text
+    x="600"
+    y="1042"
+    text-anchor="middle"
+    fill="#634b31"
+    font-family="Arial,sans-serif"
+    font-size="23"
+  >
+    Raw public key 48 bytes · signature 16,224 bytes
+  </text>
+
+  <rect x="64" y="1110" width="1072" height="91" rx="22" fill="#17301c" />
+  <text
+    x="600"
+    y="1150"
+    text-anchor="middle"
+    fill="#fff"
+    font-family="Arial,sans-serif"
+    font-size="26"
+    font-weight="700"
+  >
+    Different constructions and assumptions;
+  </text>
+  <text
+    x="600"
+    y="1184"
+    text-anchor="middle"
+    fill="#fff"
+    font-family="Arial,sans-serif"
+    font-size="26"
+    font-weight="700"
+  >
+    neither is universally superior.
+  </text>
+  <text
+    x="1136"
+    y="1235"
+    text-anchor="end"
+    fill="#69716a"
+    font-family="Arial,sans-serif"
+    font-size="17"
+  >
+    Raw standard sizes shown · provider encodings add bytes · no speed ranking
+  </text>
+</svg>
