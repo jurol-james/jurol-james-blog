@@ -117,7 +117,7 @@ The two standards solve the same broad application problem—creating and verify
 | Representative raw sizes | ML-DSA-65: 1,952-byte public key, 4,032-byte expanded private key, 3,309-byte signature                       | SLH-DSA-SHA2-192s: 48-byte public key, 96-byte private key, 16,224-byte signature                                         |
 | Engineering tradeoff     | More compact signatures for the standardized sets shown; implementation costs depend on provider and workload | Very compact raw public keys, substantially larger signatures; `s`/`f` sets trade signature size against signing emphasis |
 
-The representative rows are not equal-category comparisons: ML-DSA-65 is category 3, while SLH-DSA-192s is also category 3, but their security models and standards differ. The table illustrates format cost, not a performance result. Neither family is universally faster or safer. Runtime, provider, hardware, message size, signing frequency, verification volume, and protocol encoding all matter. Benchmark and interoperability-test the exact combination under consideration.
+The representative examples both correspond to NIST security category 3, but they use different cryptographic constructions and security assumptions. The table illustrates key and signature size differences, not equivalent performance or a guarantee of identical security properties. Neither family is universally faster or safer. Runtime, provider, hardware, message size, signing frequency, verification volume, and protocol encoding all matter. Benchmark and interoperability-test the exact combination under consideration.
 
 <figure class="article-figure">
 
